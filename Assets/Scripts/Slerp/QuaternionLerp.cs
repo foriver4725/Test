@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class QuaternionLerp : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] Transform from;
+    [SerializeField] Transform to;
+    [SerializeField] float duration = 1f;
 
-    // Update is called once per frame
     void Update()
     {
-        
+        float t = Mathf.PingPong(Time.time / duration, 1);
+        transform.rotation = Quaternion.Lerp(from.rotation, to.rotation, t);
     }
 }

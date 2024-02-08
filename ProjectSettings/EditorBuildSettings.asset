@@ -12,19 +12,19 @@ EditorBuildSettings:
     path: Assets/Scenes/Done/Clamp.unity
     guid: 834aa9dda7d1d9449a549463d0443686
   - enabled: 1
-    path: Assets/Scenes/NotDone/Navmesh.unity
+    path: Assets/Scenes/UnDone/Navmesh.unity
     guid: fab441d3643d5624e9a66ebd0ef946c6
   - enabled: 1
-    path: Assets/Scenes/NotDone/Pause.unity
+    path: Assets/Scenes/UnDone/Pause.unity
     guid: c1622ffb787ede2448a644213c1258f9
   - enabled: 1
     path: Assets/Scenes/Done/PSD.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/NotDone/Slerp.unity
+    path: Assets/Scenes/Done/Slerp.unity
     guid: f2a48671743f4094885ce856add8ac95
   - enabled: 1
-    path: Assets/Scenes/NotDone/Tilemap.unity
+    path: Assets/Scenes/UnDone/Tilemap.unity
     guid: 9798103e88f5ddc409c52045dbaf6317
   - enabled: 1
     path: Assets/Scenes/Done/LoadSceneAsync/LoadSceneAsync.unity
@@ -32,4 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Done/LoadSceneAsync/LoadSceneAsyncAfter.unity
     guid: d05d39e07fcb7674aa09deda8df45ede
+  - enabled: 1
+    path: Assets/Scenes/UnDone/Animation.unity
+    guid: 010f5568e70292847b1b167e0a7da36f
   m_configObjects: {}

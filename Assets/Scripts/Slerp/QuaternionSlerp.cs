@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class QuaternionSlerp : MonoBehaviour
 {
-    public Transform from;
-    public Transform to;
-    public float duration = 1f;
+    [SerializeField] Transform from;
+    [SerializeField] Transform to;
+    [SerializeField] float duration = 1f;
 
     void Update()
     {
-        transform.rotation = Quaternion.Slerp(from.rotation, to.rotation, Time.time / duration);
+        float t = Mathf.PingPong(Time.time / duration, 1);
+        transform.rotation = Quaternion.Slerp(from.rotation, to.rotation, t);
     }
 }
