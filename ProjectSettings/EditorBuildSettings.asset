@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/UnDone/Navmesh.unity
     guid: fab441d3643d5624e9a66ebd0ef946c6
   - enabled: 1
-    path: Assets/Scenes/UnDone/Pause.unity
+    path: Assets/Scenes/Done/Pause.unity
     guid: c1622ffb787ede2448a644213c1258f9
   - enabled: 1
     path: Assets/Scenes/Done/PSD.unity
@@ -33,6 +33,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Done/LoadSceneAsync/LoadSceneAsyncAfter.unity
     guid: d05d39e07fcb7674aa09deda8df45ede
   - enabled: 1
-    path: Assets/Scenes/UnDone/Animation.unity
+    path: Assets/Scenes/Done/Animation.unity
     guid: 010f5568e70292847b1b167e0a7da36f
   m_configObjects: {}

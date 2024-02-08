@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PingPong : MonoBehaviour
 {
-    [SerializeField] float length = 5f;
+    // [SerializeField] float length = 5f;
     [SerializeField] float amplitude = 5f; // U•
     [SerializeField] float period = 2f; // ˆê‰•œ‚·‚éüŠúi•bj
     [SerializeField] float phase = 0.25f; // ˆÊ‘Ši‚P‚Å‚Pü•ªj
