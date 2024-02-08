@@ -24,15 +24,18 @@ EditorBuildSettings:
     path: Assets/Scenes/Done/Slerp.unity
     guid: f2a48671743f4094885ce856add8ac95
   - enabled: 1
-    path: Assets/Scenes/UnDone/Tilemap.unity
-    guid: 9798103e88f5ddc409c52045dbaf6317
-  - enabled: 1
     path: Assets/Scenes/Done/LoadSceneAsync/LoadSceneAsync.unity
     guid: 8d8fbdcab1b25394298dc8c23ac982e2
   - enabled: 1
     path: Assets/Scenes/Done/LoadSceneAsync/LoadSceneAsyncAfter.unity
     guid: d05d39e07fcb7674aa09deda8df45ede
   - enabled: 1
+    path: Assets/Scenes/Done/Tilemap.unity
+    guid: 0118a34a8bb9d5b4e85efbec9f84022f
+  - enabled: 1
     path: Assets/Scenes/Done/Animation.unity
     guid: 010f5568e70292847b1b167e0a7da36f
+  - enabled: 1
+    path: Assets/Scenes/UnDone/Shader.unity
+    guid: dd709341092edbe4b9ec96a6b5c16ec3
   m_configObjects: {}
