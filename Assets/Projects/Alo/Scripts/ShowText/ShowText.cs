@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace Alo
 {
-    public class ShowText1 : ShowTextSample
+    public class ShowText : ShowTextSample
     {
         private void Awake()
         {
-            // ステージ1-1のテキストを使う
+            // 初期設定で、ステージ1-1のテキストを使う
             stageNum = 1;
             textNum = 1;
         }
