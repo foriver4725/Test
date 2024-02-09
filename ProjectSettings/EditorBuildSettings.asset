@@ -50,4 +50,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Done/Prefab.unity
     guid: e0bf24ce2309a4644bd54dd2ab6bcd04
+  - enabled: 1
+    path: Assets/Projects/StructureOfGameProgram2/Scenes/Game.unity
+    guid: dc67d93e4dfeeb7479265cfdd6103b1d
+  - enabled: 1
+    path: Assets/Projects/StructureOfGameProgram2/Scenes/Start.unity
+    guid: 6fc620b77d9539642bca08d524092f86
+  - enabled: 1
+    path: Assets/Projects/BallLaunch/Scenes/Stage.unity
+    guid: 7c13473c1e7ae58468413aec25de24fb
+  - enabled: 1
+    path: Assets/Projects/RandomMaze/Scenes/Main.unity
+    guid: a4dd6ab882758da49ad8fcfd008801e9
   m_configObjects: {}
