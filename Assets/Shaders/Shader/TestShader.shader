@@ -1,5 +1,5 @@
 // シェーダーの情報
-Shader "Custom/TestShader"
+Shader "Custom/Shader/TestShader"
 {
     // Unity上でやり取りをするプロパティ情報
     // マテリアルのInspectorウィンドウ上に表示され、スクリプト上からも設定できる

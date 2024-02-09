@@ -3,26 +3,29 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class LoadingSceneAcync : MonoBehaviour
+namespace LoadSceneAsync
 {
-    [SerializeField] GameObject button;
-    [SerializeField] GameObject loadingUI;
-    [SerializeField] Slider slider;
-
-    public void OnClick()
+    public class LoadingSceneAsync : MonoBehaviour
     {
-        button.SetActive(false);
-        loadingUI.SetActive(true);
-        StartCoroutine(LoadScene());
-    }
+        [SerializeField] GameObject button;
+        [SerializeField] GameObject loadingUI;
+        [SerializeField] Slider slider;
 
-    IEnumerator LoadScene()
-    {
-        AsyncOperation async = SceneManager.LoadSceneAsync("LoadSceneAsyncAfter");
-        while (!async.isDone)
+        public void OnClick()
         {
-            slider.value = async.progress;
-            yield return null;
+            button.SetActive(false);
+            loadingUI.SetActive(true);
+            StartCoroutine(LoadScene());
+        }
+
+        IEnumerator LoadScene()
+        {
+            AsyncOperation async = SceneManager.LoadSceneAsync("LoadSceneAsyncAfter");
+            while (!async.isDone)
+            {
+                slider.value = async.progress;
+                yield return null;
+            }
         }
     }
 }

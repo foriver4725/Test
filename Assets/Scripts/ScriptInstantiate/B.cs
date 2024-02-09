@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class B : MonoBehaviour
+namespace ScriptInstantiate
 {
-    void Start()
+    public class B : MonoBehaviour
     {
-        A a = new A();
-        a.A1();
+        void Start()
+        {
+            A a = new A();
+            a.A1();
+        }
     }
 }

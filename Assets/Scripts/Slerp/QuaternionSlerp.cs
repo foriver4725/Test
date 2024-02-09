@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuaternionSlerp : MonoBehaviour
+namespace Slerp
 {
-    [SerializeField] Transform from;
-    [SerializeField] Transform to;
-    [SerializeField] float duration = 1f;
-
-    void Update()
+    public class QuaternionSlerp : MonoBehaviour
     {
-        float t = Mathf.PingPong(Time.time / duration, 1);
-        transform.rotation = Quaternion.Slerp(from.rotation, to.rotation, t);
+        [SerializeField] Transform from;
+        [SerializeField] Transform to;
+        [SerializeField] float duration = 1f;
+
+        void Update()
+        {
+            float t = Mathf.PingPong(Time.time / duration, 1);
+            transform.rotation = Quaternion.Slerp(from.rotation, to.rotation, t);
+        }
     }
 }

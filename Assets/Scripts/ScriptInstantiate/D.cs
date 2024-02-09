@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class D : C
+namespace ScriptInstantiate
 {
-    void Start()
+    public class D : C
     {
-        C1();
+        void Start()
+        {
+            C1();
+        }
     }
 }

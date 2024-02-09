@@ -2,29 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PauseChange : MonoBehaviour
+namespace Pause
 {
-    bool isPause = false;
-
-    void Update()
+    public class PauseChange : MonoBehaviour
     {
-        #region ポーズ切り替え
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Time.timeScale = 0;
-            isPause = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.Return))
-        {
-            Time.timeScale = 1f;
-            isPause = false;
-        }
-        #endregion
+        bool isPause = false;
 
-        // この中に書かれた処理は、ポーズの影響を受ける。
-        if (!isPause)
+        void Update()
         {
-            Debug.Log(0);
+            #region ポーズ切り替え
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Time.timeScale = 0;
+                isPause = true;
+            }
+            else if (Input.GetKeyDown(KeyCode.Return))
+            {
+                Time.timeScale = 1f;
+                isPause = false;
+            }
+            #endregion
+
+            // この中に書かれた処理は、ポーズの影響を受ける。
+            if (!isPause)
+            {
+                Debug.Log(0);
+            }
         }
     }
 }

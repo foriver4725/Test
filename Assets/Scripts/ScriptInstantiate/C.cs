@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class C : MonoBehaviour
+namespace ScriptInstantiate
 {
-    public void C1()
+    public class C : MonoBehaviour
     {
-        Debug.Log("C1");
-    }
+        public void C1()
+        {
+            Debug.Log("C1");
+        }
 
-    void C2()
-    {
-        Debug.Log("C2");
+        void C2()
+        {
+            Debug.Log("C2");
+        }
     }
 }

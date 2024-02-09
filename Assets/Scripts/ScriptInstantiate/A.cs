@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class A
+namespace ScriptInstantiate
 {
-    public void A1()
+    public class A
     {
-        Debug.Log("A1");
-    }
+        public void A1()
+        {
+            Debug.Log("A1");
+        }
 
-    void A2()
-    {
-        Debug.Log("A2");
+        void A2()
+        {
+            Debug.Log("A2");
+        }
     }
 }

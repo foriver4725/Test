@@ -2,39 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMove : MonoBehaviour
+namespace Particle
 {
-    [SerializeField] float speed = 5f;
-    [SerializeField] float jumpPower = 10f;
-
-    Rigidbody rb;
-
-    private void Start()
+    public class PlayerMove : MonoBehaviour
     {
-        rb = GetComponent<Rigidbody>();
-    }
+        [SerializeField] float speed = 5f;
+        [SerializeField] float jumpPower = 10f;
 
-    void Update()
-    {
-        if (Input.GetKey(KeyCode.W))
+        Rigidbody rb;
+
+        private void Start()
         {
-            transform.position += transform.forward * speed * Time.deltaTime;
+            rb = GetComponent<Rigidbody>();
         }
-        if (Input.GetKey(KeyCode.A))
+
+        void Update()
         {
-            transform.position += -transform.right * speed * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.position += -transform.forward * speed * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.position += transform.right * speed * Time.deltaTime;
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            rb.AddForce(transform.up * jumpPower, ForceMode.Impulse);
+            if (Input.GetKey(KeyCode.W))
+            {
+                transform.position += transform.forward * speed * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                transform.position += -transform.right * speed * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                transform.position += -transform.forward * speed * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                transform.position += transform.right * speed * Time.deltaTime;
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                rb.AddForce(transform.up * jumpPower, ForceMode.Impulse);
+            }
         }
     }
 }

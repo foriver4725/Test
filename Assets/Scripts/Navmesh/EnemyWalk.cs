@@ -5,38 +5,41 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyWalk : MonoBehaviour
+namespace Navmesh
 {
-    NavMeshAgent agent;
-    Vector3 targetPos;
-    bool isGoing = false;
-
-    private void Start()
+    public class EnemyWalk : MonoBehaviour
     {
-        agent = GetComponent<NavMeshAgent>();
-    }
+        NavMeshAgent agent;
+        Vector3 targetPos;
+        bool isGoing = false;
 
-    void Update()
-    {
-        if (!isGoing)
+        private void Start()
         {
-            isGoing = true;
-
-            // ランダムに行き先を決定
-            List<Vector3> targetPosList = new List<Vector3>();
-            foreach (GameObject point in GameObject.FindGameObjectsWithTag("Point"))
-            {
-                targetPosList.Add(point.transform.position);
-            }
-            targetPosList = targetPosList.OrderBy(a => Guid.NewGuid()).ToList();
-            targetPos = targetPosList[0];
-
-            agent.destination = targetPos;
+            agent = GetComponent<NavMeshAgent>();
         }
 
-        if (agent.remainingDistance < 0.5f)
+        void Update()
         {
-            isGoing = false;
+            if (!isGoing)
+            {
+                isGoing = true;
+
+                // ランダムに行き先を決定
+                List<Vector3> targetPosList = new List<Vector3>();
+                foreach (GameObject point in GameObject.FindGameObjectsWithTag("Point"))
+                {
+                    targetPosList.Add(point.transform.position);
+                }
+                targetPosList = targetPosList.OrderBy(a => Guid.NewGuid()).ToList();
+                targetPos = targetPosList[0];
+
+                agent.destination = targetPos;
+            }
+
+            if (agent.remainingDistance < 0.5f)
+            {
+                isGoing = false;
+            }
         }
     }
 }
