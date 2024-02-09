@@ -44,4 +44,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Done/Particle.unity
     guid: 4bc8ed9ef0322d447a92aacc6006efc5
+  - enabled: 1
+    path: Assets/Scenes/Done/ScriptInstantiate.unity
+    guid: d2265f5591f1e74449dd0f4496d3a5e4
+  - enabled: 1
+    path: Assets/Scenes/Done/Prefab.unity
+    guid: e0bf24ce2309a4644bd54dd2ab6bcd04
   m_configObjects: {}
