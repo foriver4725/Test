@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RandomMaze
 {
-    [CreateAssetMenu(menuName = "ParamsSO/Player", fileName = "PlayerParamsSO")]
+    [CreateAssetMenu(menuName = "ParamsSO/RandomMaze/Player", fileName = "PlayerParamsSO")]
     public class PlayerParamsSO : ScriptableObject
     {
         #region QOLŒüãˆ—

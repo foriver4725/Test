@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RandomMaze
 {
-    [CreateAssetMenu(menuName = "ParamsSO/Prefab", fileName = "PrefabParamsSO")]
+    [CreateAssetMenu(menuName = "ParamsSO/RandomMaze/Prefab", fileName = "PrefabParamsSO")]
     public class PrefabParamsSO : ScriptableObject
     {
         #region QOLŒüãˆ—
