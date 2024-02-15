@@ -4,12 +4,12 @@ using UnityEditor;
 namespace LifeGame
 {
     [InitializeOnLoad]
-    public class AssetSelectionChecker
+    public class SOBugAnnouncer
     {
         static bool errorShown = false; // エラーメッセージを表示したかどうかのフラグ
         static string targetAssetPath = "Assets/Projects/LifeGame/Resources/LifeGame/LifeGameSO.asset"; // 検知したいアセットのパス
 
-        static AssetSelectionChecker()
+        static SOBugAnnouncer()
         {
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
         }
