@@ -69,15 +69,15 @@ EditorBuildSettings:
     path: Assets/Projects/Alo/Scenes/1/1-1.unity
     guid: 2d55488ec74e3564b88db2e7fbcc6915
   - enabled: 1
-    path: Assets/Projects/GoHome/Scenes/GameScene.unity
-    guid: 7fc46654e13424544bcde22550c0ce56
-  - enabled: 1
     path: Assets/Scenes/Done/SO.unity
     guid: b7e986e7e426cdb46b6127a9477d3b7a
   - enabled: 1
     path: Assets/Projects/LifeGame/Scenes/LifeGame.unity
     guid: f8aa37b5325aee14e89e7e698c34e550
   - enabled: 1
-    path: Assets/Scenes/UnDone/Interface.unity
+    path: Assets/Scenes/Done/Interface.unity
     guid: 36236ded2f02cc840aa8e7ec416b6f22
+  - enabled: 1
+    path: Assets/Scenes/Done/EventTrigger.unity
+    guid: fc96e0727298cc64393c1c14c7f3e66c
   m_configObjects: {}
