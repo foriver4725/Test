@@ -80,4 +80,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Done/EventTrigger.unity
     guid: fc96e0727298cc64393c1c14c7f3e66c
+  - enabled: 1
+    path: Assets/Scenes/UnDone/_UniTask.unity
+    guid: e3b2452c386553344b0974f1975d7561
   m_configObjects: {}
