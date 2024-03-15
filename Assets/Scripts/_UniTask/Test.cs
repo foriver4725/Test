@@ -9,26 +9,6 @@ namespace _UniTask
 {
     public class Test : MonoBehaviour
     {
-        /// <summary>
-        /// オーバーフローするよ
-        /// </summary>
-        //byte a = 255;
-        //int b = 2147483645;
-
-        //void Start()
-        //{
-        //    a += 1;
-        //    Debug.Log(a);
-        //}
-
-        //void Update()
-        //{
-        //    b += 1;
-        //    Debug.Log(b);
-        //}
-
-
-
         CancellationTokenSource cts;
 
         async void Start()
@@ -39,7 +19,7 @@ namespace _UniTask
             UniTask a = /*await */A(token);
             UniTask b = /*await */B(token);
             UniTask[] tasks = { a, b };
-            C(tasks);
+            UniTask c = C(tasks);
 
             await UniTask.Delay(TimeSpan.FromSeconds(1f));
             cts?.Cancel(); // null条件演算子を使用
