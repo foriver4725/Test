@@ -16,6 +16,8 @@ namespace CustomMethods
             Collection.Make((e) => e, (e) => e.Item1 != "b", Collection.Zip(a, b)).Look();
 
             Collection.Make((e) => e % 2 == 1 ? "odd" : "even", Collection.Range(10)).Look((e) => '"' + e + '"');
+
+            Collection.Map((e) => e % 2 == 0, Collection.Make((e) => e, Collection.Range(10))).Look();
         }
 
         void Update()
@@ -261,6 +263,18 @@ namespace Ex
                 {
                     ret.Add(e);
                 }
+            }
+
+            return ret;
+        }
+
+        public static List<T2> Map<T1, T2>(Func<T1, T2> func, List<T1> list)
+        {
+            List<T2> ret = new List<T2>();
+
+            foreach (T1 e in list)
+            {
+                ret.Add(func(e));
             }
 
             return ret;
