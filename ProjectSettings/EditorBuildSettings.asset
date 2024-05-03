@@ -98,5 +98,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Done/RandomSeed.unity
     guid: ee448c22a8d5ed544b34fe676c3a0cce
+  - enabled: 1
+    path: Assets/Scenes/Done/CustomMethods.unity
+    guid: 8dd5d133dfbd2034ab98e8612ac01510
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

@@ -11,7 +11,11 @@ namespace CustomMethods
     {
         void Start()
         {
+            List<string> a = new List<string>() { "a", "b", "c" };
+            List<string> b = new List<string>() { "x", "y", "z" };
+            Collection.Make((e) => e, (e) => e.Item1 != "b", Collection.Zip(a, b)).Look();
 
+            Collection.Make((e) => e % 2 == 1 ? "odd" : "even", Collection.Range(10)).Look((e) => '"' + e + '"');
         }
 
         void Update()
@@ -99,38 +103,13 @@ namespace Ex
             return ret;
         }
 
-        public static List<(int, T)> IEnumerate<T>(this T[] self)
-        {
-            List<(int, T)> ret = new List<(int, T)>();
-            for (int i = 0; i < self.Length; i++)
-            {
-                ret.Add((i, self[i]));
-            }
-            return ret;
-        }
-
-        public static List<(int, T)> IEnumerate<T>(this List<T> self)
+        public static List<(int, T)> Enumerate<T>(this List<T> self)
         {
             List<(int, T)> ret = new List<(int, T)>();
             for (int i = 0; i < self.Count; i++)
             {
                 ret.Add((i, self[i]));
             }
-            return ret;
-        }
-
-        public static T[] Shuffle<T>(this T[] self)
-        {
-            int n = self.Length;
-            T[] ret = new T[n];
-            Array.Copy(self, ret, n);
-
-            for (int i = n - 1; i >= 1; i--)
-            {
-                int j = Random.RandInt(0, i);
-                (ret[i], ret[j]) = (ret[j], ret[i]);
-            }
-
             return ret;
         }
 
@@ -148,30 +127,143 @@ namespace Ex
             return ret;
         }
 
-        public static T RandomChoice<T>(this T[] self)
-        {
-            return self[Random.RandInt(0, self.Length - 1)];
-        }
-
         public static T RandomChoice<T>(this List<T> self)
         {
             return self[Random.RandInt(0, self.Count - 1)];
         }
 
-        public static void Look<T>(this T[] self)
-        {
-            foreach (T e in self)
-            {
-                e.ShowSelf();
-            }
-        }
-
         public static void Look<T>(this List<T> self)
         {
+            string start = "List(";
+            string end = ")";
+            string middle = "";
+
+            foreach ((int, T) e in Enumerate(self))
+            {
+                if (e.Item1 == 0)
+                {
+                    middle += $"{e.Item2}";
+                }
+                else
+                {
+                    middle += $", {e.Item2}";
+                }
+            }
+
+            Debug.Show(start + middle + end);
+        }
+
+        public static void Look<T1, T2>(this List<T1> self, Func<T1, T2> func)
+        {
+            string start = "List(";
+            string end = ")";
+            string middle = "";
+
+            foreach ((int, T1) e in Enumerate(self))
+            {
+                if (e.Item1 == 0)
+                {
+                    middle += $"{func(e.Item2)}";
+                }
+                else
+                {
+                    middle += $", {func(e.Item2)}";
+                }
+            }
+
+            Debug.Show(start + middle + end);
+        }
+
+        public static List<(T1, T2)> Zip<T1, T2>(List<T1> list1, List<T2> list2)
+        {
+            List<(T1, T2)> ret = new List<(T1, T2)>();
+            int len = Mathf.Min(list1.Count, list2.Count);
+            foreach (int i in Range(len))
+            {
+                ret.Add((list1[i], list2[i]));
+            }
+
+            return ret;
+        }
+
+        public static uint Count(this List<bool> self, bool val)
+        {
+            uint num = 0;
+
+            foreach (bool e in self)
+            {
+                if (e == val)
+                {
+                    num++;
+                }
+            }
+
+            return num;
+        }
+
+        public static bool All(List<bool> list)
+        {
+            foreach (bool e in list)
+            {
+                if (e != true)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool Any(List<bool> list)
+        {
+            foreach (bool e in list)
+            {
+                if (e == true)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static List<T2> Make<T1, T2>(Func<T1, T2> func, List<T1> collection)
+        {
+            List<T2> ret = new List<T2>();
+            foreach (T1 e in collection)
+            {
+                ret.Add(func(e));
+            }
+
+            return ret;
+        }
+
+        public static List<T2> Make<T1, T2>(Func<T1, T2> func, Func<T1, bool> condition, List<T1> collection)
+        {
+            List<T2> ret = new List<T2>();
+            foreach (T1 e in collection)
+            {
+                if (condition(e))
+                {
+                    ret.Add(func(e));
+                }
+            }
+
+            return ret;
+        }
+
+        public static List<T> Set<T>(this List<T> self)
+        {
+            List<T> ret = new List<T>();
             foreach (T e in self)
             {
-                e.ShowSelf();
+                if (!ret.Contains(e))
+                {
+                    ret.Add(e);
+                }
             }
+
+            return ret;
         }
     }
 
