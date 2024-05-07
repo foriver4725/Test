@@ -104,5 +104,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Done/NullCheck.unity
     guid: c6ad04e4eec6fc64b8fcaecd462bf4d6
+  - enabled: 1
+    path: Assets/Scenes/Done/CoroutineWhenAll.unity
+    guid: 992cc6dae70f15941b17c5fd0ee992f5
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
