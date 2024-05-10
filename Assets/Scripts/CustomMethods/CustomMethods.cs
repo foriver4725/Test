@@ -3,30 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CustomMethods
-{
-    using Ex;
-
-    public class CustomMethods : MonoBehaviour
-    {
-        void Start()
-        {
-            List<string> a = new List<string>() { "a", "b", "c" };
-            List<string> b = new List<string>() { "x", "y", "z" };
-            Collection.Make((e) => e, (e) => e.Item1 != "b", Collection.Zip(a, b)).Look();
-
-            Collection.Make((e) => e % 2 == 1 ? "odd" : "even", Collection.Range(10)).Look((e) => '"' + e + '"');
-
-            Collection.Map((e) => e % 2 == 0, Collection.Make((e) => e, Collection.Range(10))).Look();
-        }
-
-        void Update()
-        {
-
-        }
-    }
-}
-
 namespace Ex
 {
     public static class Debug
@@ -58,18 +34,98 @@ namespace Ex
         {
             return (a - b).sqrMagnitude >= Mathf.Pow(d, 2);
         }
+
+        public static float Cos(this float theta)
+        {
+            return Mathf.Cos(theta);
+        }
+
+        public static float Sin(this float theta)
+        {
+            return Mathf.Sin(theta);
+        }
+
+        public static float Tan(this float theta)
+        {
+            return Mathf.Tan(theta);
+        }
+
+        public static float Acos(this float theta)
+        {
+            return Mathf.Acos(theta);
+        }
+
+        public static float Asin(this float theta)
+        {
+            return Mathf.Asin(theta);
+        }
+
+        public static float Atan(this float theta)
+        {
+            return Mathf.Atan(theta);
+        }
+
+        public static float Atan2(this Vector2 vec)
+        {
+            return Mathf.Atan2(vec.y, vec.x);
+        }
+
+        public static float Pow(this float _base, float exponent)
+        {
+            return Mathf.Pow(_base, exponent);
+        }
     }
 
     public static class Random
     {
+        public static bool RandomBool()
+        {
+            return RandInt(0, 1) == 0;
+        }
+
         public static int RandInt(int min, int max)
         {
             return UnityEngine.Random.Range(min, max + 1);
         }
 
-        public static bool RandomBool()
+        public static float RandFloat(float min, float max)
         {
-            return RandInt(0, 1) == 0;
+            return UnityEngine.Random.Range(min, max);
+        }
+
+        public static Vector2 RandSquare(float sizeX, float sizeY)
+        {
+            return new(RandFloat(0, sizeX), RandFloat(0, sizeY));
+        }
+
+        public static Vector2Int RandSquare(int sizeX, int sizeY)
+        {
+            return new(RandInt(0, sizeX), RandInt(0, sizeY));
+        }
+
+        /// <param name="sizeR">sizeR >= 0</param>
+        public static Vector2 RandCircle(float sizeR)
+        {
+            float theta = RandFloat(0, 2 * Mathf.PI);
+            return new Vector2(theta.Cos(), theta.Sin()) * sizeR;
+        }
+
+        public static Vector3 RandCube(float sizeX, float sizeY, float sizeZ)
+        {
+            return new(RandFloat(0, sizeX), RandFloat(0, sizeY), RandFloat(0, sizeZ));
+        }
+
+        public static Vector3Int RandCube(int sizeX, int sizeY, int sizeZ)
+        {
+            return new(RandInt(0, sizeX), RandInt(0, sizeY), RandInt(0, sizeZ));
+        }
+
+        /// <param name="sizeR">sizeR >= 0</param>
+        public static Vector3 RandSphere(float sizeR)
+        {
+            float theta = RandFloat(0, Mathf.PI);
+            float phi = RandFloat(0, 2 * Mathf.PI);
+            return new Vector3(theta.Sin() * phi.Cos(), theta.Sin() * phi.Sin(), theta.Cos()) * sizeR;
         }
     }
 
@@ -77,7 +133,7 @@ namespace Ex
     {
         public static List<int> Range(int stop)
         {
-            List<int> ret = new List<int>();
+            List<int> ret = new();
             for (int i = 0; i < stop; i += 1)
             {
                 ret.Add(i);
@@ -87,7 +143,7 @@ namespace Ex
 
         public static List<int> Range(int start, int stop)
         {
-            List<int> ret = new List<int>();
+            List<int> ret = new();
             for (int i = start; i < stop; i += 1)
             {
                 ret.Add(i);
@@ -97,7 +153,7 @@ namespace Ex
 
         public static List<int> Range(int start, int stop, int step)
         {
-            List<int> ret = new List<int>();
+            List<int> ret = new();
             for (int i = start; i < stop; i += step)
             {
                 ret.Add(i);
@@ -107,7 +163,7 @@ namespace Ex
 
         public static List<(int, T)> Enumerate<T>(this List<T> self)
         {
-            List<(int, T)> ret = new List<(int, T)>();
+            List<(int, T)> ret = new();
             for (int i = 0; i < self.Count; i++)
             {
                 ret.Add((i, self[i]));
@@ -118,7 +174,7 @@ namespace Ex
         public static List<T> Shuffle<T>(this List<T> self)
         {
             int n = self.Count;
-            List<T> ret = new List<T>(self);
+            List<T> ret = new(self);
 
             for (int i = n - 1; i >= 1; i--)
             {
@@ -178,7 +234,7 @@ namespace Ex
 
         public static List<(T1, T2)> Zip<T1, T2>(List<T1> list1, List<T2> list2)
         {
-            List<(T1, T2)> ret = new List<(T1, T2)>();
+            List<(T1, T2)> ret = new();
             int len = Mathf.Min(list1.Count, list2.Count);
             foreach (int i in Range(len))
             {
@@ -231,7 +287,7 @@ namespace Ex
 
         public static List<T2> Make<T1, T2>(Func<T1, T2> func, List<T1> collection)
         {
-            List<T2> ret = new List<T2>();
+            List<T2> ret = new();
             foreach (T1 e in collection)
             {
                 ret.Add(func(e));
@@ -242,7 +298,7 @@ namespace Ex
 
         public static List<T2> Make<T1, T2>(Func<T1, T2> func, Func<T1, bool> condition, List<T1> collection)
         {
-            List<T2> ret = new List<T2>();
+            List<T2> ret = new();
             foreach (T1 e in collection)
             {
                 if (condition(e))
@@ -256,7 +312,7 @@ namespace Ex
 
         public static List<T> Set<T>(this List<T> self)
         {
-            List<T> ret = new List<T>();
+            List<T> ret = new();
             foreach (T e in self)
             {
                 if (!ret.Contains(e))
@@ -270,7 +326,7 @@ namespace Ex
 
         public static List<T2> Map<T1, T2>(Func<T1, T2> func, List<T1> list)
         {
-            List<T2> ret = new List<T2>();
+            List<T2> ret = new();
 
             foreach (T1 e in list)
             {
@@ -278,6 +334,17 @@ namespace Ex
             }
 
             return ret;
+        }
+    }
+
+    public static class Flow
+    {
+        public static void Loop(uint loopNum, Action action)
+        {
+            for (int _ = 0; _ < loopNum; _++)
+            {
+                action();
+            }
         }
     }
 
