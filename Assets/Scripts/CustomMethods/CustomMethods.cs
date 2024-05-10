@@ -31,7 +31,7 @@ namespace Ex
 {
     public static class Debug
     {
-        public static void Show<T>(T msg)
+        public static void Print<T>(T msg)
         {
 #if true
             UnityEngine.Debug.Log(msg);
@@ -40,9 +40,9 @@ namespace Ex
 #endif
         }
 
-        public static void ShowSelf<T>(this T self)
+        public static void Show<T>(this T self)
         {
-            Show(self);
+            Print(self);
         }
     }
 
