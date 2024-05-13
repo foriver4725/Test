@@ -107,5 +107,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Done/CoroutineWhenAll.unity
     guid: 992cc6dae70f15941b17c5fd0ee992f5
+  - enabled: 1
+    path: Assets/Scenes/Done/EnumConvert.unity
+    guid: 84a7edcdd9ef4c94b96e19c83945ed37
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
