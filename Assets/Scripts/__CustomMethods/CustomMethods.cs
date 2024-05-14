@@ -1,7 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 namespace Ex
 {
@@ -16,9 +20,23 @@ namespace Ex
 #endif
         }
 
+        public static void Print<T>(string title, T msg)
+        {
+#if true
+            UnityEngine.Debug.Log($"{title}:{msg}");
+#else
+            return;
+#endif
+        }
+
         public static void Show<T>(this T self)
         {
             Print(self);
+        }
+
+        public static void Show<T>(this T self, string title)
+        {
+            Print(title, self);
         }
     }
 
@@ -33,6 +51,16 @@ namespace Ex
         public static bool CompareDistance(Vector3 a, Vector3 b, float d)
         {
             return (a - b).sqrMagnitude >= Mathf.Pow(d, 2);
+        }
+
+        public static int Abs(this int sc)
+        {
+            return Mathf.Abs(sc);
+        }
+
+        public static float Abs(this float sc)
+        {
+            return Mathf.Abs(sc);
         }
 
         public static float Cos(this float theta)
@@ -73,6 +101,54 @@ namespace Ex
         public static float Pow(this float _base, float exponent)
         {
             return Mathf.Pow(_base, exponent);
+        }
+
+        public static int Scroll(int len, int nowIndex, int indexDelta)
+        {
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(len));
+
+            nowIndex += indexDelta;
+
+            if (indexDelta >= 0)
+            {
+                while (nowIndex > len - 1)
+                {
+                    nowIndex -= len;
+                }
+            }
+            else
+            {
+                while (nowIndex < 0)
+                {
+                    nowIndex += len;
+                }
+            }
+
+            return nowIndex;
+        }
+
+        public static int Clamp(this int self, int min, int max)
+        {
+            return Mathf.Clamp(self, min, max);
+        }
+
+        public static float Clamp(this float self, float min, float max)
+        {
+            return Mathf.Clamp(self, min, max);
+        }
+
+        public static (int, int) DivMod(int a, int b)
+        {
+            int quotient = a / b;
+            int remainder = a % b;
+            return (quotient, remainder);
+        }
+
+        public static (int, float) DivMod(float a, float b)
+        {
+            int quotient = (int)(a / b);
+            float remainder = a % b;
+            return (quotient, remainder);
         }
     }
 
@@ -167,6 +243,18 @@ namespace Ex
             for (int i = 0; i < self.Count; i++)
             {
                 ret.Add((i, self[i]));
+            }
+            return ret;
+        }
+
+        public static List<(int, T1, T2)> Enumerate<T1, T2>(Dictionary<T1, T2> self)
+        {
+            List<(int, T1, T2)> ret = new();
+            int i = 0;
+            foreach (KeyValuePair<T1, T2> e in self)
+            {
+                ret.Add((i, e.Key, e.Value));
+                i++;
             }
             return ret;
         }
@@ -285,7 +373,7 @@ namespace Ex
             return false;
         }
 
-        public static List<T2> Make<T1, T2>(Func<T1, T2> func, List<T1> collection)
+        public static List<T2> Make<T1, T2>(List<T1> collection, Func<T1, T2> func)
         {
             List<T2> ret = new();
             foreach (T1 e in collection)
@@ -296,7 +384,7 @@ namespace Ex
             return ret;
         }
 
-        public static List<T2> Make<T1, T2>(Func<T1, T2> func, Func<T1, bool> condition, List<T1> collection)
+        public static List<T2> Make<T1, T2>(List<T1> collection, Func<T1, bool> condition, Func<T1, T2> func)
         {
             List<T2> ret = new();
             foreach (T1 e in collection)
@@ -324,7 +412,7 @@ namespace Ex
             return ret;
         }
 
-        public static List<T2> Map<T1, T2>(Func<T1, T2> func, List<T1> list)
+        public static List<T2> Map<T1, T2>(List<T1> list, Func<T1, T2> func)
         {
             List<T2> ret = new();
 
@@ -335,16 +423,102 @@ namespace Ex
 
             return ret;
         }
+
+        public static void Map<T>(List<T> list, Action<T> act)
+        {
+            foreach (T e in list)
+            {
+                act(e);
+            }
+        }
+
+        public static (string, T) Find<T>(this List<(string, T)> self, string key)
+        {
+            for (int i = 0; i < self.Count; i++)
+            {
+                if (self[i].Item1 == key)
+                {
+                    return self[i];
+                }
+            }
+            throw new Exception();
+        }
+
+        /// <summary>Return true if the key was found.</summary>
+        public static bool Target<T>(this List<(string, T)> self, string key, Func<(string, T), (string, T)> funcIfFound, Action<string> actIfNotFound)
+        {
+            for (int i = 0; i < self.Count; i++)
+            {
+                if (self[i].Item1 == key)
+                {
+                    self[i] = funcIfFound((self[i].Item1, self[i].Item2));
+                    return true;
+                }
+            }
+            actIfNotFound(key);
+            return false;
+        }
+
+        /// <summary>Return true if the key was found.</summary>
+        public static bool Target<T>(this List<(string, T)> self, string key, Func<(string, T), bool> conditionOnFound, Action<(string, T)> actIfTrue, Action<(string, T)> actIfFalse)
+        {
+            for (int i = 0; i < self.Count; i++)
+            {
+                if (self[i].Item1 == key)
+                {
+                    if (conditionOnFound((self[i].Item1, self[i].Item2)))
+                    {
+                        actIfTrue((self[i].Item1, self[i].Item2));
+                    }
+                    else
+                    {
+                        actIfFalse((self[i].Item1, self[i].Item2));
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static int Len<T>(this List<T> self)
+        {
+            return self.Count;
+        }
+
+        public static int Sum(List<int> list)
+        {
+            int ret = 0;
+            foreach (int e in list)
+            {
+                ret += e;
+            }
+            return ret;
+        }
+
+        public static float Sum(List<float> list)
+        {
+            float ret = 0;
+            foreach (float e in list)
+            {
+                ret += e;
+            }
+            return ret;
+        }
     }
 
     public static class Flow
     {
-        public static void Loop(this Action action, uint loopNum)
+        public static void Loop(Action action, uint loopNum)
         {
             for (int _ = 0; _ < loopNum; _++)
             {
                 action();
             }
+        }
+
+        public static void Pass()
+        {
+            return;
         }
     }
 
@@ -370,7 +544,7 @@ namespace Ex
         public static List<T> FindsTag<T>(this string self) where T : Component
         {
             GameObject[] objs = GameObject.FindGameObjectsWithTag(self);
-            List<T> ret = Collection.Make((e) => e.GetComponent<T>(), new List<GameObject>(objs));
+            List<T> ret = Collection.Make(new List<GameObject>(objs), (e) => e.GetComponent<T>());
             return ret;
         }
 
@@ -390,6 +564,14 @@ namespace Ex
         public static void OnClick(this Button button, UnityEngine.Events.UnityAction call)
         {
             button.onClick.AddListener(call);
+        }
+    }
+
+    public static class Instance
+    {
+        public static T GetChildComponent<T>(this GameObject self, int childIndex) where T : Component
+        {
+            return self.transform.GetChild(childIndex).GetComponent<T>();
         }
     }
 

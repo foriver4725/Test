@@ -11,11 +11,11 @@ namespace CustomMethods
         {
             List<string> a = new() { "a", "b", "c" };
             List<string> b = new() { "x", "y", "z" };
-            Collection.Make((e) => e, (e) => e.Item1 != "b", Collection.Zip(a, b)).Look();
+            Collection.Make(Collection.Zip(a, b), (e) => e.Item1 != "b", (e) => e).Look();
 
-            Collection.Make((e) => e % 2 == 1 ? "odd" : "even", Collection.Range(10)).Look((e) => '"' + e + '"');
+            Collection.Make(Collection.Range(10), (e) => e % 2 == 1 ? "odd" : "even").Look((e) => '"' + e + '"');
 
-            Collection.Map((e) => e % 2 == 0, Collection.Make((e) => e, Collection.Range(10))).Look();
+            Collection.Map(Collection.Make(Collection.Range(10), (e) => e), (e) => e % 2 == 0).Look();
         }
 
         void Update()
