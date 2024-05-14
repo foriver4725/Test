@@ -161,7 +161,7 @@ namespace Ex
             return ret;
         }
 
-        public static List<(int, T)> Enumerate<T>(this List<T> self)
+        public static List<(int, T)> Enumerate<T>(List<T> self)
         {
             List<(int, T)> ret = new();
             for (int i = 0; i < self.Count; i++)
@@ -339,7 +339,7 @@ namespace Ex
 
     public static class Flow
     {
-        public static void Loop(uint loopNum, Action action)
+        public static void Loop(this Action action, uint loopNum)
         {
             for (int _ = 0; _ < loopNum; _++)
             {
@@ -355,9 +355,23 @@ namespace Ex
             return GameObject.FindGameObjectWithTag(self);
         }
 
-        public static GameObject[] FindsTag(this string self)
+        public static T FindTag<T>(this string self) where T : Component
         {
-            return GameObject.FindGameObjectsWithTag(self);
+            return GameObject.FindGameObjectWithTag(self).GetComponent<T>();
+        }
+
+        public static List<GameObject> FindsTag(this string self)
+        {
+            GameObject[] objsArray = GameObject.FindGameObjectsWithTag(self);
+            List<GameObject> ret = new List<GameObject>(objsArray);
+            return ret;
+        }
+
+        public static List<T> FindsTag<T>(this string self) where T : Component
+        {
+            GameObject[] objs = GameObject.FindGameObjectsWithTag(self);
+            List<T> ret = Collection.Make((e) => e.GetComponent<T>(), new List<GameObject>(objs));
+            return ret;
         }
 
         public static bool HasTag(this Collider self, string tag)
@@ -368,6 +382,14 @@ namespace Ex
         public static bool HasTag(this Collision self, string tag)
         {
             return self.gameObject.CompareTag(tag);
+        }
+    }
+
+    public static class UI
+    {
+        public static void OnClick(this Button button, UnityEngine.Events.UnityAction call)
+        {
+            button.onClick.AddListener(call);
         }
     }
 
