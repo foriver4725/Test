@@ -1,10 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace Ex
@@ -150,6 +147,29 @@ namespace Ex
             float remainder = a % b;
             return (quotient, remainder);
         }
+
+        public static (int, int, int) NormalizedTime(this float time)
+        {
+            (int min, float time_) = DivMod(time, 60);
+            (int sec, float thi_) = DivMod(time_ * 100, 100);
+            int thi = (int)thi_;
+            return (min, sec, thi);
+        }
+
+        public static int Round2(float sc)
+        {
+            return (int)System.Math.Round(sc, 0, MidpointRounding.AwayFromZero);
+        }
+
+        public static int Rounded(this float sc)
+        {
+            return (int)Mathf.Round(sc);
+        }
+
+        public static int Rounded2(this float sc)
+        {
+            return (int)System.Math.Round(sc, 0, MidpointRounding.AwayFromZero);
+        }
     }
 
     public static class Random
@@ -229,10 +249,22 @@ namespace Ex
 
         public static List<int> Range(int start, int stop, int step)
         {
+            if (step == 0) throw new Exception("InfinityLoop.");
+
             List<int> ret = new();
-            for (int i = start; i < stop; i += step)
+            if (step > 0)
             {
-                ret.Add(i);
+                for (int i = start; i < stop; i += step)
+                {
+                    ret.Add(i);
+                }
+            }
+            else
+            {
+                for (int i = start; i > stop; i += step)
+                {
+                    ret.Add(i);
+                }
             }
             return ret;
         }
@@ -459,27 +491,6 @@ namespace Ex
             return false;
         }
 
-        /// <summary>Return true if the key was found.</summary>
-        public static bool Target<T>(this List<(string, T)> self, string key, Func<(string, T), bool> conditionOnFound, Action<(string, T)> actIfTrue, Action<(string, T)> actIfFalse)
-        {
-            for (int i = 0; i < self.Count; i++)
-            {
-                if (self[i].Item1 == key)
-                {
-                    if (conditionOnFound((self[i].Item1, self[i].Item2)))
-                    {
-                        actIfTrue((self[i].Item1, self[i].Item2));
-                    }
-                    else
-                    {
-                        actIfFalse((self[i].Item1, self[i].Item2));
-                    }
-                    return true;
-                }
-            }
-            return false;
-        }
-
         public static int Len<T>(this List<T> self)
         {
             return self.Count;
@@ -504,6 +515,58 @@ namespace Ex
             }
             return ret;
         }
+
+        public static List<T> Slice<T>(this List<T> self, int stop)
+        {
+            List<T> ret = new();
+            for (int i = 0; i < stop; i++)
+            {
+                ret.Add(self[i]);
+            }
+            return ret;
+        }
+
+        public static List<T> Slice<T>(this List<T> self, int start, int stop)
+        {
+            List<T> ret = new();
+            for (int i = start; i < stop; i++)
+            {
+                ret.Add(self[i]);
+            }
+            return ret;
+        }
+
+        public static List<T> Slice<T>(this List<T> self, int start, int stop, int step)
+        {
+            if (step == 0) throw new Exception("InfinityLoop.");
+
+            List<T> ret = new();
+            if (step > 0)
+            {
+                for (int i = start; i < stop; i += step)
+                {
+                    ret.Add(self[i]);
+                }
+            }
+            else
+            {
+                for (int i = start; i > stop; i += step)
+                {
+                    ret.Add(self[i]);
+                }
+            }
+            return ret;
+        }
+
+        public static List<T> Reversed<T>(this List<T> self)
+        {
+            List<T> ret = new();
+            for (int i = self.Count - 1; i >= 0; i--)
+            {
+                ret.Add(self[i]);
+            }
+            return ret;
+        }
     }
 
     public static class Flow
@@ -519,6 +582,21 @@ namespace Ex
         public static void Pass()
         {
             return;
+        }
+
+        public static T Pass<T>(T value)
+        {
+            return value;
+        }
+
+        public static void PassSelf<T1>(this T1 self)
+        {
+            return;
+        }
+
+        public static T2 PassSelf<T1, T2>(this T1 self, T2 value)
+        {
+            return value;
         }
     }
 

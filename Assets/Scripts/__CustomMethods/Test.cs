@@ -7,6 +7,11 @@ namespace CustomMethods
 {
     public class Test : MonoBehaviour
     {
+        void Awake()
+        {
+            enabled = true;
+        }
+
         void Start()
         {
             List<string> a = new() { "a", "b", "c" };
@@ -16,6 +21,8 @@ namespace CustomMethods
             Collection.Make(Collection.Range(10), (e) => e % 2 == 1 ? "odd" : "even").Look((e) => '"' + e + '"');
 
             Collection.Map(Collection.Make(Collection.Range(10), (e) => e), (e) => e % 2 == 0).Look();
+
+            List<int> c = new() { 1, 2, 3, -1, -2, -3 };
         }
 
         void Update()
