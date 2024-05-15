@@ -23,8 +23,6 @@ namespace CustomMethods
             Collection.Map(Collection.Make(Collection.Range(10), (e) => e), (e) => e % 2 == 0).Look();
 
             List<int> c = new() { 1, 2, 3, -1, -2, -3 };
-            c.Sort();
-            c.Look();
         }
 
         void Update()

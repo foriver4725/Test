@@ -568,13 +568,18 @@ namespace Ex
             return ret;
         }
 
-        public static List<T> Sorted<T>(this List<T> self, bool isSmall2Big = true)
+        public static List<T> Sorted<T>(this List<T> self, bool isSmall2Big = true) where T : IComparable<T>
         {
             List<T> copiedSelf = new(self);
             if (isSmall2Big)
             {
                 copiedSelf.Sort();
             }
+            else
+            {
+                copiedSelf.Sort((a, b) => b.CompareTo(a));
+            }
+            return copiedSelf;
         }
     }
 
