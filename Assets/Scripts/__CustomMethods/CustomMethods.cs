@@ -567,6 +567,15 @@ namespace Ex
             }
             return ret;
         }
+
+        public static List<T> Sorted<T>(this List<T> self, bool isSmall2Big = true)
+        {
+            List<T> copiedSelf = new(self);
+            if (isSmall2Big)
+            {
+                copiedSelf.Sort();
+            }
+        }
     }
 
     public static class Flow
