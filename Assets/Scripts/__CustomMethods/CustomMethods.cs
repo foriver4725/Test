@@ -134,6 +134,54 @@ namespace Ex
             return Mathf.Clamp(self, min, max);
         }
 
+        public static int ClampFloor(this int self, int min)
+        {
+            if (self < min)
+            {
+                return min;
+            }
+            else
+            {
+                return self;
+            }
+        }
+
+        public static float ClampFloor(this float self, float min)
+        {
+            if (self < min)
+            {
+                return min;
+            }
+            else
+            {
+                return self;
+            }
+        }
+
+        public static int ClampCeil(this int self, int max)
+        {
+            if (self > max)
+            {
+                return max;
+            }
+            else
+            {
+                return self;
+            }
+        }
+
+        public static float ClampCeil(this float self, float max)
+        {
+            if (self > max)
+            {
+                return max;
+            }
+            else
+            {
+                return self;
+            }
+        }
+
         public static (int, int) DivMod(int a, int b)
         {
             int quotient = a / b;
@@ -496,6 +544,11 @@ namespace Ex
             return self.Count;
         }
 
+        public static int Len<T>(this T[] self)
+        {
+            return self.Length;
+        }
+
         public static int Sum(List<int> list)
         {
             int ret = 0;
@@ -612,6 +665,15 @@ namespace Ex
         {
             return value;
         }
+
+        public static void Quit()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
     }
 
     public static class Tag
@@ -661,9 +723,39 @@ namespace Ex
 
     public static class Instance
     {
+        public static Transform GetGrandsChild(this Transform self, List<int> indices)
+        {
+            Transform ret = self;
+            for (int i = 0; i < indices.Count; i++)
+            {
+                ret = ret.GetChild(indices[i]);
+            }
+            return ret;
+        }
+
         public static T GetChildComponent<T>(this GameObject self, int childIndex) where T : Component
         {
             return self.transform.GetChild(childIndex).GetComponent<T>();
+        }
+
+        public static T GetGrandsChildComponent<T>(this GameObject self, List<int> grandsChildIndices) where T : Component
+        {
+            return self.transform.GetGrandsChild(grandsChildIndices).GetComponent<T>();
+        }
+
+        public static T GC<T>(this GameObject self) where T : Component
+        {
+            return self.GetComponent<T>();
+        }
+
+        public static T GCC<T>(this GameObject self,int childIndex) where T : Component
+        {
+            return self.GetChildComponent<T>(childIndex);
+        }
+
+        public static T GGCC<T>(this GameObject self, List<int> grandsChildIndices) where T : Component
+        {
+            return self.GetGrandsChildComponent<T>(grandsChildIndices);
         }
     }
 
