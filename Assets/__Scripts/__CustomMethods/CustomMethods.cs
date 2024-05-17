@@ -413,6 +413,17 @@ namespace Ex
             }
         }
 
+        public static IEnumerable<Vector2Int> Enumerate(Vector2Int vec)
+        {
+            for (int x = 0; x < vec.x; x++)
+            {
+                for (int y = 0; y < vec.y; y++)
+                {
+                    yield return new(x, y);
+                }
+            }
+        }
+
         public static IEnumerable<Vector2Int> Enumerate((int x, int y) sq)
         {
             for (int x = 0; x < sq.x; x++)
@@ -487,6 +498,20 @@ namespace Ex
                     for (int y = _y.start; y > _y.stop; y += _y.step)
                     {
                         yield return new(x, y);
+                    }
+                }
+            }
+        }
+
+        public static IEnumerable<Vector3Int> Enumerate(Vector3Int vec)
+        {
+            for (int x = 0; x < vec.x; x++)
+            {
+                for (int y = 0; y < vec.y; y++)
+                {
+                    for (int z = 0; z < vec.z; z++)
+                    {
+                        yield return new(x, y, z);
                     }
                 }
             }
