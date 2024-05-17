@@ -413,11 +413,11 @@ namespace Ex
             }
         }
 
-        public static IEnumerable<Vector2Int> Enumerate(Vector2Int vec)
+        public static IEnumerable<Vector2Int> Enumerate((int x, int y) sq)
         {
-            for (int x = 0; x < vec.x; x++)
+            for (int x = 0; x < sq.x; x++)
             {
-                for (int y = 0; y < vec.y; y++)
+                for (int y = 0; y < sq.y; y++)
                 {
                     yield return new(x, y);
                 }
@@ -492,13 +492,13 @@ namespace Ex
             }
         }
 
-        public static IEnumerable<Vector3Int> Enumerate(Vector3Int vec)
+        public static IEnumerable<Vector3Int> Enumerate((int x, int y, int z) cu)
         {
-            for (int x = 0; x < vec.x; x++)
+            for (int x = 0; x < cu.x; x++)
             {
-                for (int y = 0; y < vec.y; y++)
+                for (int y = 0; y < cu.y; y++)
                 {
-                    for (int z = 0; z < vec.z; z++)
+                    for (int z = 0; z < cu.z; z++)
                     {
                         yield return new(x, y, z);
                     }
@@ -964,7 +964,7 @@ namespace Ex
             return copiedSelf;
         }
 
-        public static T Where<T>(this T[,] self, Vector2Int pos)
+        public static T Get<T>(this T[,] self, Vector2Int pos)
         {
             return self[pos.x, pos.y];
         }
@@ -974,7 +974,7 @@ namespace Ex
             self[pos.x, pos.y] = val;
         }
 
-        public static T Where<T>(this T[,,] self, Vector3Int pos)
+        public static T Get<T>(this T[,,] self, Vector3Int pos)
         {
             return self[pos.x, pos.y, pos.z];
         }
@@ -984,7 +984,7 @@ namespace Ex
             self[pos.x, pos.y, pos.z] = val;
         }
 
-        public static T Where<T>(this T[,] self, Vector2Int pos, Vector2Int ofst)
+        public static T Get<T>(this T[,] self, Vector2Int pos, Vector2Int ofst)
         {
             return self[pos.x + ofst.x, pos.y + ofst.y];
         }
@@ -994,7 +994,7 @@ namespace Ex
             self[pos.x + ofst.x, pos.y + ofst.y] = val;
         }
 
-        public static T Where<T>(this T[,,] self, Vector3Int pos, Vector3Int ofst)
+        public static T Get<T>(this T[,,] self, Vector3Int pos, Vector3Int ofst)
         {
             return self[pos.x + ofst.x, pos.y + ofst.y, pos.z + ofst.z];
         }
