@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,12 +39,7 @@ namespace Ex
 
     public static class Math
     {
-        /// <summary>
-        /// Return "true" if the distance between "a" and "b" is larger than or equal to "d", else "false";
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="d"></param>
+        /// <summary>Return "true" if the distance between "a" and "b" is larger than or equal to "d", else "false";</summary>
         public static bool CompareDistance(Vector3 a, Vector3 b, float d)
         {
             return (a - b).sqrMagnitude >= Mathf.Pow(d, 2);
@@ -103,26 +97,31 @@ namespace Ex
 
         public static int Scroll(int len, int nowIndex, int indexDelta)
         {
-            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(len));
-
-            nowIndex += indexDelta;
-
-            if (indexDelta >= 0)
+            if (len <= 0)
             {
-                while (nowIndex > len - 1)
-                {
-                    nowIndex -= len;
-                }
+                throw new ArgumentOutOfRangeException(nameof(len));
             }
             else
             {
-                while (nowIndex < 0)
-                {
-                    nowIndex += len;
-                }
-            }
+                nowIndex += indexDelta;
 
-            return nowIndex;
+                if (indexDelta >= 0)
+                {
+                    while (nowIndex > len - 1)
+                    {
+                        nowIndex -= len;
+                    }
+                }
+                else
+                {
+                    while (nowIndex < 0)
+                    {
+                        nowIndex += len;
+                    }
+                }
+
+                return nowIndex;
+            }
         }
 
         public static int Clamp(this int self, int min, int max)
@@ -331,6 +330,7 @@ namespace Ex
         public static List<T> ToList<T>(this IEnumerable<T> collection)
         {
             List<T> ret = new();
+
             foreach (T e in collection)
             {
                 ret.Add(e);
@@ -364,9 +364,11 @@ namespace Ex
 
         public static IEnumerable<int> Range(int start, int stop, int step)
         {
-            if (step == 0) throw new Exception("InfinityLoop.");
-
-            if (step > 0)
+            if (step == 0)
+            {
+                throw new Exception("InfinityLoop.");
+            }
+            else if (step > 0)
             {
                 for (int i = start; i < stop; i += step)
                 {
@@ -387,6 +389,7 @@ namespace Ex
             using (IEnumerator<T> IEr = self.GetEnumerator())
             {
                 int i = 0;
+
                 while (IEr.MoveNext())
                 {
                     i++;
@@ -406,6 +409,7 @@ namespace Ex
         public static IEnumerable<(int index, T1 key, T2 value)> Enumerate<T1, T2>(Dictionary<T1, T2> self)
         {
             int i = 0;
+
             foreach (KeyValuePair<T1, T2> e in self)
             {
                 yield return (i, e.Key, e.Value);
@@ -459,9 +463,11 @@ namespace Ex
 
         public static IEnumerable<Vector2Int> Enumerate((int start, int stop, int step) _x, (int start, int stop, int step) _y)
         {
-            if (_x.step == 0 || _y.step == 0) throw new Exception("InfinityLoop.");
-
-            if (_x.step > 0 && _y.step > 0)
+            if (_x.step == 0 || _y.step == 0)
+            {
+                throw new Exception("InfinityLoop.");
+            }
+            else if (_x.step > 0 && _y.step > 0)
             {
                 for (int x = _x.start; x < _x.stop; x += _x.step)
                 {
@@ -561,9 +567,11 @@ namespace Ex
 
         public static IEnumerable<Vector3Int> Enumerate((int start, int stop, int step) _x, (int start, int stop, int step) _y, (int start, int stop, int step) _z)
         {
-            if (_x.step == 0 || _y.step == 0 || _z.step == 0) throw new Exception("InfinityLoop.");
-
-            if (_x.step > 0 && _y.step > 0 && _z.step > 0)
+            if (_x.step == 0 || _y.step == 0 || _z.step == 0)
+            {
+                throw new Exception("InfinityLoop.");
+            }
+            else if (_x.step > 0 && _y.step > 0 && _z.step > 0)
             {
                 for (int x = _x.start; x < _x.stop; x += _x.step)
                 {
@@ -671,10 +679,9 @@ namespace Ex
 
         public static List<T> Shuffle<T>(this List<T> self)
         {
-            int n = self.Count;
             List<T> ret = new(self);
 
-            for (int i = n - 1; i >= 1; i--)
+            for (int i = self.Count - 1; i >= 1; i--)
             {
                 int j = Random.RandInt(0, i);
                 (ret[i], ret[j]) = (ret[j], ret[i]);
@@ -686,48 +693,6 @@ namespace Ex
         public static T RandomChoice<T>(this List<T> self)
         {
             return self[Random.RandInt(0, self.Count - 1)];
-        }
-
-        public static void Look<T>(this List<T> self)
-        {
-            string start = "List(";
-            string end = ")";
-            string middle = "";
-
-            foreach ((int index, T value) in Enumerate(self))
-            {
-                if (index == 0)
-                {
-                    middle += $"{value}";
-                }
-                else
-                {
-                    middle += $", {value}";
-                }
-            }
-
-            (start + middle + end).Show();
-        }
-
-        public static void Look<T1, T2>(this List<T1> self, Func<T1, T2> func)
-        {
-            string start = "List(";
-            string end = ")";
-            string middle = "";
-
-            foreach ((int index, T1 value) in Enumerate(self))
-            {
-                if (index == 0)
-                {
-                    middle += $"{func(value)}";
-                }
-                else
-                {
-                    middle += $", {func(value)}";
-                }
-            }
-
-            (start + middle + end).Show();
         }
 
         public static void Look<T>(this IEnumerable<T> self)
@@ -772,10 +737,10 @@ namespace Ex
             (start + middle + end).Show();
         }
 
-        public static IEnumerable<(T1 e1, T2 e2)> Zip<T1, T2>(IEnumerable<T1> collection1, IEnumerable<T2> collection2)
+        public static IEnumerable<(T1 e1, T2 e2)> Zip<T1, T2>(IEnumerable<T1> clc1, IEnumerable<T2> clc2)
         {
-            using (IEnumerator<T1> IEr1 = collection1.GetEnumerator())
-            using (IEnumerator<T2> IEr2 = collection2.GetEnumerator())
+            using (IEnumerator<T1> IEr1 = clc1.GetEnumerator())
+            using (IEnumerator<T2> IEr2 = clc2.GetEnumerator())
             {
                 while (IEr1.MoveNext() && IEr2.MoveNext())
                 {
@@ -825,19 +790,19 @@ namespace Ex
             return false;
         }
 
-        public static IEnumerable<T2> Make<T1, T2>(IEnumerable<T1> collection, Func<T1, T2> func)
+        public static IEnumerable<T2> Make<T1, T2>(IEnumerable<T1> clc, Func<T1, T2> func)
         {
-            foreach (T1 e in collection)
+            foreach (T1 e in clc)
             {
                 yield return func(e);
             }
         }
 
-        public static IEnumerable<T2> Make<T1, T2>(IEnumerable<T1> collection, Func<T1, bool> condition, Func<T1, T2> func)
+        public static IEnumerable<T2> Make<T1, T2>(IEnumerable<T1> clc, Func<T1, bool> cnd, Func<T1, T2> func)
         {
-            foreach (T1 e in collection)
+            foreach (T1 e in clc)
             {
-                if (condition(e))
+                if (cnd(e))
                 {
                     yield return func(e);
                 }
@@ -847,6 +812,7 @@ namespace Ex
         public static List<T> Set<T>(this List<T> self)
         {
             List<T> ret = new();
+
             foreach (T e in self)
             {
                 if (!ret.Contains(e))
@@ -858,46 +824,56 @@ namespace Ex
             return ret;
         }
 
-        public static IEnumerable<T2> Map<T1, T2>(IEnumerable<T1> collection, Func<T1, T2> func)
+        public static IEnumerable<T2> Map<T1, T2>(IEnumerable<T1> clc, Func<T1, T2> func)
         {
-            foreach (T1 e in collection)
+            foreach (T1 e in clc)
             {
                 yield return func(e);
             }
         }
 
-        public static void Map<T>(IEnumerable<T> collection, Action<T> act)
+        public static void Map<T>(IEnumerable<T> clc, Action<T> act)
         {
-            foreach (T e in collection)
+            foreach (T e in clc)
             {
                 act(e);
             }
         }
 
-        public static (string key, T value) Find<T>(this List<(string key, T value)> self, string key)
+        public static (string key, T value) DicGet<T>(this IEnumerable<(string key, T value)> self, string key)
         {
-            for (int i = 0; i < self.Count; i++)
+            foreach ((string _key, T _value) in self)
             {
-                if (self[i].key == key)
+                if (_key == key)
                 {
-                    return self[i];
+                    return (_key, _value);
                 }
             }
-            throw new Exception();
+
+            throw new Exception("The key was not found.");
         }
 
         /// <summary>Return true if the key was found.</summary>
-        public static bool Target<T>(this List<(string key, T value)> self, string key, Func<(string key, T value), (string key, T value)> funcIfFound, Action<string> actIfNotFound)
+        public static bool DicSet<T>
+            (
+            this List<(string key, T value)> self,
+            string key,
+            Func<(string key, T value), (string key, T value)> funcIfFound,
+            Action<string> actIfNotFound
+            )
         {
             for (int i = 0; i < self.Count; i++)
             {
                 if (self[i].key == key)
                 {
                     self[i] = funcIfFound((self[i].key, self[i].value));
+
                     return true;
                 }
             }
+
             actIfNotFound(key);
+
             return false;
         }
 
@@ -911,23 +887,27 @@ namespace Ex
             return self.Length;
         }
 
-        public static int Sum(List<int> list)
+        public static int Sum(IEnumerable<int> clc)
         {
             int ret = 0;
-            foreach (int e in list)
+
+            foreach (int e in clc)
             {
                 ret += e;
             }
+
             return ret;
         }
 
-        public static float Sum(List<float> list)
+        public static float Sum(IEnumerable<float> clc)
         {
             float ret = 0;
-            foreach (float e in list)
+
+            foreach (float e in clc)
             {
                 ret += e;
             }
+
             return ret;
         }
 
@@ -949,9 +929,11 @@ namespace Ex
 
         public static IEnumerable<T> Slice<T>(this List<T> self, int start, int stop, int step)
         {
-            if (step == 0) throw new Exception("InfinityLoop.");
-
-            if (step > 0)
+            if (step == 0)
+            {
+                throw new Exception("InfinityLoop.");
+            }
+            else if (step > 0)
             {
                 for (int i = start; i < stop; i += step)
                 {
@@ -978,6 +960,7 @@ namespace Ex
         public static List<T> Sorted<T>(this List<T> self, bool isSmall2Big = true) where T : IComparable<T>
         {
             List<T> copiedSelf = new(self);
+
             if (isSmall2Big)
             {
                 copiedSelf.Sort();
@@ -986,6 +969,7 @@ namespace Ex
             {
                 copiedSelf.Sort((a, b) => b.CompareTo(a));
             }
+
             return copiedSelf;
         }
 
@@ -1085,15 +1069,15 @@ namespace Ex
         public static List<GameObject> FindsTag(this string self)
         {
             GameObject[] objsArray = GameObject.FindGameObjectsWithTag(self);
-            List<GameObject> ret = new(objsArray);
-            return ret;
+
+            return new(objsArray);
         }
 
         public static List<T> FindsTag<T>(this string self) where T : Component
         {
             GameObject[] objs = GameObject.FindGameObjectsWithTag(self);
-            List<T> ret = Collection.Make(new List<GameObject>(objs), (e) => e.GetComponent<T>()).ToList();
-            return ret;
+
+            return Collection.Make(objs, (e) => e.GetComponent<T>()).ToList();
         }
 
         public static bool HasTag(this Collider self, string tag)
@@ -1125,10 +1109,12 @@ namespace Ex
         public static GameObject GetGrandsChild(this GameObject self, params int[] indices)
         {
             Transform retTf = self.transform;
+
             for (int i = 0; i < indices.Length; i++)
             {
                 retTf = retTf.GetChild(indices[i]);
             }
+
             return retTf.gameObject;
         }
 
@@ -1195,50 +1181,122 @@ namespace Ex
     {
         public static bool IsIn(this int val, int min, int max, bool isMinInclude = true, bool isMaxInclude = true)
         {
-            if (isMinInclude && isMaxInclude) return min <= val && val <= max;
-            else if (!isMinInclude && isMaxInclude) return min < val && val <= max;
-            else if (isMinInclude && !isMaxInclude) return min <= val && val < max;
-            else return min < val && val < max;
+            if (isMinInclude && isMaxInclude)
+            {
+                return min <= val && val <= max;
+            }
+            else if (!isMinInclude && isMaxInclude)
+            {
+                return min < val && val <= max;
+            }
+            else if (isMinInclude && !isMaxInclude)
+            {
+                return min <= val && val < max;
+            }
+            else
+            {
+                return min < val && val < max;
+            }
         }
 
         public static bool IsIn(this float val, float min, float max, bool isMinInclude = true, bool isMaxInclude = true)
         {
-            if (isMinInclude && isMaxInclude) return min <= val && val <= max;
-            else if (!isMinInclude && isMaxInclude) return min < val && val <= max;
-            else if (isMinInclude && !isMaxInclude) return min <= val && val < max;
-            else return min < val && val < max;
+            if (isMinInclude && isMaxInclude)
+            {
+                return min <= val && val <= max;
+            }
+            else if (!isMinInclude && isMaxInclude)
+            {
+                return min < val && val <= max;
+            }
+            else if (isMinInclude && !isMaxInclude)
+            {
+                return min <= val && val < max;
+            }
+            else
+            {
+                return min < val && val < max;
+            }
         }
 
         public static bool IsIn(this Vector2Int val, int min, int max, bool isMinInclude = true, bool isMaxInclude = true)
         {
-            if (isMinInclude && isMaxInclude) return (min <= val.x && val.x <= max) && (min <= val.y && val.y <= max);
-            else if (!isMinInclude && isMaxInclude) return (min < val.x && val.x <= max) && (min < val.y && val.y <= max);
-            else if (isMinInclude && !isMaxInclude) return (min <= val.x && val.x < max) && (min <= val.y && val.y < max);
-            else return (min < val.x && val.x < max) && (min < val.y && val.y < max);
+            if (isMinInclude && isMaxInclude)
+            {
+                return (min <= val.x && val.x <= max) && (min <= val.y && val.y <= max);
+            }
+            else if (!isMinInclude && isMaxInclude)
+            {
+                return (min < val.x && val.x <= max) && (min < val.y && val.y <= max);
+            }
+            else if (isMinInclude && !isMaxInclude)
+            {
+                return (min <= val.x && val.x < max) && (min <= val.y && val.y < max);
+            }
+            else
+            {
+                return (min < val.x && val.x < max) && (min < val.y && val.y < max);
+            }
         }
 
         public static bool IsIn(this Vector3Int val, int min, int max, bool isMinInclude = true, bool isMaxInclude = true)
         {
-            if (isMinInclude && isMaxInclude) return (min <= val.x && val.x <= max) && (min <= val.y && val.y <= max) && (min <= val.z && val.z <= max);
-            else if (!isMinInclude && isMaxInclude) return (min < val.x && val.x <= max) && (min < val.y && val.y <= max) && (min < val.z && val.z <= max);
-            else if (isMinInclude && !isMaxInclude) return (min <= val.x && val.x < max) && (min <= val.y && val.y < max) && (min <= val.z && val.z < max);
-            else return (min < val.x && val.x < max) && (min < val.y && val.y < max) && (min < val.z && val.z < max);
+            if (isMinInclude && isMaxInclude)
+            {
+                return (min <= val.x && val.x <= max) && (min <= val.y && val.y <= max) && (min <= val.z && val.z <= max);
+            }
+            else if (!isMinInclude && isMaxInclude)
+            {
+                return (min < val.x && val.x <= max) && (min < val.y && val.y <= max) && (min < val.z && val.z <= max);
+            }
+            else if (isMinInclude && !isMaxInclude)
+            {
+                return (min <= val.x && val.x < max) && (min <= val.y && val.y < max) && (min <= val.z && val.z < max);
+            }
+            else
+            {
+                return (min < val.x && val.x < max) && (min < val.y && val.y < max) && (min < val.z && val.z < max);
+            }
         }
 
         public static bool IsIn(this Vector2 val, float min, float max, bool isMinInclude = true, bool isMaxInclude = true)
         {
-            if (isMinInclude && isMaxInclude) return (min <= val.x && val.x <= max) && (min <= val.y && val.y <= max);
-            else if (!isMinInclude && isMaxInclude) return (min < val.x && val.x <= max) && (min < val.y && val.y <= max);
-            else if (isMinInclude && !isMaxInclude) return (min <= val.x && val.x < max) && (min <= val.y && val.y < max);
-            else return (min < val.x && val.x < max) && (min < val.y && val.y < max);
+            if (isMinInclude && isMaxInclude)
+            {
+                return (min <= val.x && val.x <= max) && (min <= val.y && val.y <= max);
+            }
+            else if (!isMinInclude && isMaxInclude)
+            {
+                return (min < val.x && val.x <= max) && (min < val.y && val.y <= max);
+            }
+            else if (isMinInclude && !isMaxInclude)
+            {
+                return (min <= val.x && val.x < max) && (min <= val.y && val.y < max);
+            }
+            else
+            {
+                return (min < val.x && val.x < max) && (min < val.y && val.y < max);
+            }
         }
 
         public static bool IsIn(this Vector3 val, float min, float max, bool isMinInclude = true, bool isMaxInclude = true)
         {
-            if (isMinInclude && isMaxInclude) return (min <= val.x && val.x <= max) && (min <= val.y && val.y <= max) && (min <= val.z && val.z <= max);
-            else if (!isMinInclude && isMaxInclude) return (min < val.x && val.x <= max) && (min < val.y && val.y <= max) && (min < val.z && val.z <= max);
-            else if (isMinInclude && !isMaxInclude) return (min <= val.x && val.x < max) && (min <= val.y && val.y < max) && (min <= val.z && val.z < max);
-            else return (min < val.x && val.x < max) && (min < val.y && val.y < max) && (min < val.z && val.z < max);
+            if (isMinInclude && isMaxInclude)
+            {
+                return (min <= val.x && val.x <= max) && (min <= val.y && val.y <= max) && (min <= val.z && val.z <= max);
+            }
+            else if (!isMinInclude && isMaxInclude)
+            {
+                return (min < val.x && val.x <= max) && (min < val.y && val.y <= max) && (min < val.z && val.z <= max);
+            }
+            else if (isMinInclude && !isMaxInclude)
+            {
+                return (min <= val.x && val.x < max) && (min <= val.y && val.y < max) && (min <= val.z && val.z < max);
+            }
+            else
+            {
+                return (min < val.x && val.x < max) && (min < val.y && val.y < max) && (min < val.z && val.z < max);
+            }
         }
     }
 
