@@ -1650,10 +1650,9 @@ namespace Ex
             return ret;
         }
 
-        public static string Mul(this string _txt, int num)
+        public static string Mul(this string txt, int num)
         {
             string ret = "";
-            char txt = _txt[0];
 
             for (int i = 0; i < num; i++)
             {
