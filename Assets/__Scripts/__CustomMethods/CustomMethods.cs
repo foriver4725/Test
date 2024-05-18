@@ -1,11 +1,29 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Ex
 {
+    public enum Vec
+    {
+        X,
+        Y,
+        Z
+    }
+
+    public enum Col
+    {
+        R,
+        G,
+        B,
+        A
+    }
+
     public static class Debug
     {
         public static void Print<T>(T msg)
@@ -228,12 +246,23 @@ namespace Ex
             return (q, r);
         }
 
-        public static (int min, int sec, int thi) NormalizedTime(this float time)
+        public static (int min, int sec, int thi) ToTime(this float self)
         {
-            (int min, float time_) = DivMod(time, 60);
-            (int sec, float thi_) = DivMod(time_ * 100, 100);
+            (int min, float tmp) = DivMod(self, 60);
+            (int sec, float thi_) = DivMod(tmp * 100, 100);
             int thi = (int)thi_;
             return (min, sec, thi);
+        }
+
+        public static (string min, string sec, string thi) ToTimeText(this float self)
+        {
+            (int min, int sec, int thi) = self.ToTime();
+            return (min.ToString("D2"), sec.ToString("D2"), thi.ToString("D2"));
+        }
+
+        public static (string min, string sec, string thi) ToTimeText(this (int min, int sec, int thi) self)
+        {
+            return (self.min.ToString("D2"), self.sec.ToString("D2"), self.thi.ToString("D2"));
         }
 
         public static int Round2(float sc)
@@ -269,6 +298,199 @@ namespace Ex
         public static int Sum(this Vector3Int self)
         {
             return self.x + self.y + self.z;
+        }
+
+        public static void Rev(this ref bool self)
+        {
+            self = !self;
+        }
+
+        public static Vector2 ToZeroed(this Vector2 self, Vec place)
+        {
+            switch (place)
+            {
+                case Vec.X:
+                    return new(0, self.y);
+
+                case Vec.Y:
+                    return new(self.x, 0);
+
+                default:
+                    return self;
+            }
+        }
+
+        public static Vector2Int ToZeroed(this Vector2Int self, Vec place)
+        {
+            switch (place)
+            {
+                case Vec.X:
+                    return new(0, self.y);
+
+                case Vec.Y:
+                    return new(self.x, 0);
+
+                default:
+                    return self;
+            }
+        }
+
+        public static Vector3 ToZeroed(this Vector3 self, Vec place)
+        {
+            switch (place)
+            {
+                case Vec.X:
+                    return new(0, self.y, self.z);
+
+                case Vec.Y:
+                    return new(self.x, 0, self.z);
+
+                case Vec.Z:
+                    return new(self.x, self.y, 0);
+
+                default:
+                    return self;
+            }
+        }
+
+        public static Vector3Int ToZeroed(this Vector3Int self, Vec place)
+        {
+            switch (place)
+            {
+                case Vec.X:
+                    return new(0, self.y, self.z);
+
+                case Vec.Y:
+                    return new(self.x, 0, self.z);
+
+                case Vec.Z:
+                    return new(self.x, self.y, 0);
+
+                default:
+                    return self;
+            }
+        }
+
+        public static Color ToZeroed(this Color self, Col place)
+        {
+            switch (place)
+            {
+                case Col.R:
+                    return new(0, self.g, self.b, self.a);
+
+                case Col.G:
+                    return new(self.r, 0, self.b, self.a);
+
+                case Col.B:
+                    return new(self.r, self.g, 0, self.a);
+
+                case Col.A:
+                    return new(self.r, self.g, self.b, 0);
+
+                default:
+                    return self;
+            }
+        }
+
+        public static void ToZero(this ref Vector2 self, Vec place)
+        {
+            switch (place)
+            {
+                case Vec.X:
+                    self = new(0, self.y);
+                    return;
+
+                case Vec.Y:
+                    self = new(self.x, 0);
+                    return;
+
+                default:
+                    return;
+            }
+        }
+
+        public static void ToZero(this ref Vector2Int self, Vec place)
+        {
+            switch (place)
+            {
+                case Vec.X:
+                    self = new(0, self.y);
+                    return;
+
+                case Vec.Y:
+                    self = new(self.x, 0);
+                    return;
+
+                default:
+                    return;
+            }
+        }
+
+        public static void ToZero(this ref Vector3 self, Vec place)
+        {
+            switch (place)
+            {
+                case Vec.X:
+                    self = new(0, self.y, self.z);
+                    return;
+
+                case Vec.Y:
+                    self = new(self.x, 0, self.z);
+                    return;
+
+                case Vec.Z:
+                    self = new(self.x, self.y, 0);
+                    return;
+
+                default:
+                    return;
+            }
+        }
+
+        public static void ToZero(this ref Vector3Int self, Vec place)
+        {
+            switch (place)
+            {
+                case Vec.X:
+                    self = new(0, self.y, self.z);
+                    return;
+
+                case Vec.Y:
+                    self = new(self.x, 0, self.z);
+                    return;
+
+                case Vec.Z:
+                    self = new(self.x, self.y, 0);
+                    return;
+
+                default:
+                    return;
+            }
+        }
+
+        public static void ToZero(this ref Color self, Col place)
+        {
+            switch (place)
+            {
+                case Col.R:
+                    self = new(0, self.g, self.b, self.a);
+                    return;
+
+                case Col.G:
+                    self = new(self.r, 0, self.b, self.a);
+                    return;
+
+                case Col.B:
+                    self = new(self.r, self.g, 0, self.a);
+                    return;
+
+                case Col.A:
+                    self = new(self.r, self.g, self.b, 0);
+                    return;
+
+                default:
+                    return;
+            }
         }
     }
 
@@ -690,6 +912,11 @@ namespace Ex
             return ret;
         }
 
+        public static List<T> Shuffle2<T>(this List<T> self)
+        {
+            return self.OrderBy(e => Guid.NewGuid()).ToList();
+        }
+
         public static T RandomChoice<T>(this List<T> self)
         {
             return self[Random.RandInt(0, self.Count - 1)];
@@ -1044,6 +1271,11 @@ namespace Ex
             return value;
         }
 
+        public static void Reload()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
         public static void Quit()
         {
 #if UNITY_EDITOR
@@ -1096,6 +1328,20 @@ namespace Ex
         public static void OnClick(this Button button, UnityEngine.Events.UnityAction call)
         {
             button.onClick.AddListener(call);
+        }
+
+        public static void SetCursor(bool isOn)
+        {
+            if (isOn)
+            {
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
     }
 
@@ -1174,6 +1420,96 @@ namespace Ex
         public static bool MouseStay(this int index)
         {
             return UnityEngine.Input.GetMouseButton(index);
+        }
+
+        public static Vector2 AxisMove(bool isRaw = false, bool isNormalized = true)
+        {
+            if (!isRaw)
+            {
+                float h = UnityEngine.Input.GetAxis("Horizontal");
+                float v = UnityEngine.Input.GetAxis("Vertical");
+
+                if (isNormalized)
+                {
+                    return new Vector2(h, v).normalized;
+                }
+                else
+                {
+                    return new(h, v);
+                }
+            }
+            else
+            {
+                float h = UnityEngine.Input.GetAxisRaw("Horizontal");
+                float v = UnityEngine.Input.GetAxisRaw("Vertical");
+
+                if (isNormalized)
+                {
+                    return new Vector2(h, v).normalized;
+                }
+                else
+                {
+                    return new(h, v);
+                }
+            }
+        }
+
+        public static Vector2 AxisMouse(bool isRaw = false, bool isNormalized = true)
+        {
+            if (!isRaw)
+            {
+                float x = UnityEngine.Input.GetAxis("Mouse X");
+                float y = UnityEngine.Input.GetAxis("Mouse Y");
+
+                if (isNormalized)
+                {
+                    return new Vector2(x, y).normalized;
+                }
+                else
+                {
+                    return new(x, y);
+                }
+            }
+            else
+            {
+                float x = UnityEngine.Input.GetAxisRaw("Mouse X");
+                float y = UnityEngine.Input.GetAxisRaw("Mouse Y");
+
+                if (isNormalized)
+                {
+                    return new Vector2(x, y).normalized;
+                }
+                else
+                {
+                    return new(x, y);
+                }
+            }
+        }
+
+        public static float AxisWheel(bool isRaw = false, bool isNormalized = true)
+        {
+            if (!isRaw)
+            {
+                if (isNormalized)
+                {
+                    return UnityEngine.Input.GetAxis("Mouse ScrollWheel").Rounded2();
+                }
+                else
+                {
+                    return UnityEngine.Input.GetAxis("Mouse ScrollWheel");
+                }
+            }
+            else
+            {
+                if (isNormalized)
+                {
+                    return UnityEngine.Input.GetAxisRaw("Mouse ScrollWheel").Rounded2();
+                }
+                else
+                {
+                    return UnityEngine.Input.GetAxisRaw("Mouse ScrollWheel");
+                }
+            }
         }
     }
 
@@ -1297,6 +1633,34 @@ namespace Ex
             {
                 return (min < val.x && val.x < max) && (min < val.y && val.y < max) && (min < val.z && val.z < max);
             }
+        }
+    }
+
+    public static class String
+    {
+        public static string Mul(this char txt, int num)
+        {
+            string ret = "";
+
+            for (int i = 0; i < num; i++)
+            {
+                ret += txt;
+            }
+
+            return ret;
+        }
+
+        public static string Mul(this string _txt, int num)
+        {
+            string ret = "";
+            char txt = _txt[0];
+
+            for (int i = 0; i < num; i++)
+            {
+                ret += txt;
+            }
+
+            return ret;
         }
     }
 
