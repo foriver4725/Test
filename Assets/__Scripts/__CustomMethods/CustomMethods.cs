@@ -28,7 +28,7 @@ namespace Ex
     {
         public static void Print<T>(T msg)
         {
-#if true
+#if UNITY_EDITOR && true
             UnityEngine.Debug.Log(msg);
 #else
             return;
@@ -37,7 +37,7 @@ namespace Ex
 
         public static void Print<T>(string title, T msg)
         {
-#if true
+#if UNITY_EDITOR && true
             UnityEngine.Debug.Log($"{title}:{msg}");
 #else
             return;
@@ -1636,7 +1636,7 @@ namespace Ex
         }
     }
 
-    public static class String
+    public static class Str
     {
         public static string Mul(this char txt, int num)
         {
@@ -1660,6 +1660,19 @@ namespace Ex
             }
 
             return ret;
+        }
+    }
+
+    public static class Cast
+    {
+        public static T ToEnum<T>(this string self, bool isIgnoreCase = false) where T : Enum
+        {
+            return (T)Enum.Parse(typeof(T), self, isIgnoreCase);
+        }
+
+        public static string ToStr<T>(this T self, string format = null) where T : Enum
+        {
+            return format == null ? self.ToString() : self.ToString(format);
         }
     }
 
