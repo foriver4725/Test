@@ -2,10 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Ex
 {
@@ -24,12 +24,12 @@ namespace Ex
         A
     }
 
-    public static class Debug
+    public static class Dbg
     {
         public static void Print<T>(T msg)
         {
 #if UNITY_EDITOR && true
-            UnityEngine.Debug.Log(msg);
+            Debug.Log(msg);
 #else
             return;
 #endif
@@ -38,7 +38,7 @@ namespace Ex
         public static void Print<T>(string title, T msg)
         {
 #if UNITY_EDITOR && true
-            UnityEngine.Debug.Log($"{title}:{msg}");
+            Debug.Log($"{title}:{msg}");
 #else
             return;
 #endif
@@ -494,7 +494,7 @@ namespace Ex
         }
     }
 
-    public static class Random
+    public static class Rand
     {
         public static bool RandomBool()
         {
@@ -503,12 +503,12 @@ namespace Ex
 
         public static int RandInt(int min, int max)
         {
-            return UnityEngine.Random.Range(min, max + 1);
+            return Random.Range(min, max + 1);
         }
 
         public static float RandFloat(float min, float max)
         {
-            return UnityEngine.Random.Range(min, max);
+            return Random.Range(min, max);
         }
 
         public static Vector2 RandSquare(float sizeX, float sizeY)
@@ -905,7 +905,7 @@ namespace Ex
 
             for (int i = self.Count - 1; i >= 1; i--)
             {
-                int j = Random.RandInt(0, i);
+                int j = Random.Range(0, i + 1);
                 (ret[i], ret[j]) = (ret[j], ret[i]);
             }
 
@@ -919,7 +919,7 @@ namespace Ex
 
         public static T RandomChoice<T>(this List<T> self)
         {
-            return self[Random.RandInt(0, self.Count - 1)];
+            return self[Random.Range(0, self.Count)];
         }
 
         public static void Look<T>(this IEnumerable<T> self)
@@ -1390,44 +1390,44 @@ namespace Ex
         }
     }
 
-    public static class Input
+    public static class Ipt
     {
         public static bool Up(this KeyCode keyCode)
         {
-            return UnityEngine.Input.GetKeyUp(keyCode);
+            return Input.GetKeyUp(keyCode);
         }
 
         public static bool Down(this KeyCode keyCode)
         {
-            return UnityEngine.Input.GetKeyDown(keyCode);
+            return Input.GetKeyDown(keyCode);
         }
 
         public static bool Stay(this KeyCode keyCode)
         {
-            return UnityEngine.Input.GetKey(keyCode);
+            return Input.GetKey(keyCode);
         }
 
         public static bool MouseUp(this int index)
         {
-            return UnityEngine.Input.GetMouseButtonUp(index);
+            return Input.GetMouseButtonUp(index);
         }
 
         public static bool MouseDown(this int index)
         {
-            return UnityEngine.Input.GetMouseButtonDown(index);
+            return Input.GetMouseButtonDown(index);
         }
 
         public static bool MouseStay(this int index)
         {
-            return UnityEngine.Input.GetMouseButton(index);
+            return Input.GetMouseButton(index);
         }
 
         public static Vector2 AxisMove(bool isRaw = false, bool isNormalized = true)
         {
             if (!isRaw)
             {
-                float h = UnityEngine.Input.GetAxis("Horizontal");
-                float v = UnityEngine.Input.GetAxis("Vertical");
+                float h = Input.GetAxis("Horizontal");
+                float v = Input.GetAxis("Vertical");
 
                 if (isNormalized)
                 {
@@ -1440,8 +1440,8 @@ namespace Ex
             }
             else
             {
-                float h = UnityEngine.Input.GetAxisRaw("Horizontal");
-                float v = UnityEngine.Input.GetAxisRaw("Vertical");
+                float h = Input.GetAxisRaw("Horizontal");
+                float v = Input.GetAxisRaw("Vertical");
 
                 if (isNormalized)
                 {
@@ -1458,8 +1458,8 @@ namespace Ex
         {
             if (!isRaw)
             {
-                float x = UnityEngine.Input.GetAxis("Mouse X");
-                float y = UnityEngine.Input.GetAxis("Mouse Y");
+                float x = Input.GetAxis("Mouse X");
+                float y = Input.GetAxis("Mouse Y");
 
                 if (isNormalized)
                 {
@@ -1472,8 +1472,8 @@ namespace Ex
             }
             else
             {
-                float x = UnityEngine.Input.GetAxisRaw("Mouse X");
-                float y = UnityEngine.Input.GetAxisRaw("Mouse Y");
+                float x = Input.GetAxisRaw("Mouse X");
+                float y = Input.GetAxisRaw("Mouse Y");
 
                 if (isNormalized)
                 {
@@ -1492,22 +1492,22 @@ namespace Ex
             {
                 if (isNormalized)
                 {
-                    return UnityEngine.Input.GetAxis("Mouse ScrollWheel").Rounded2();
+                    return Input.GetAxis("Mouse ScrollWheel").Rounded2();
                 }
                 else
                 {
-                    return UnityEngine.Input.GetAxis("Mouse ScrollWheel");
+                    return Input.GetAxis("Mouse ScrollWheel");
                 }
             }
             else
             {
                 if (isNormalized)
                 {
-                    return UnityEngine.Input.GetAxisRaw("Mouse ScrollWheel").Rounded2();
+                    return Input.GetAxisRaw("Mouse ScrollWheel").Rounded2();
                 }
                 else
                 {
-                    return UnityEngine.Input.GetAxisRaw("Mouse ScrollWheel");
+                    return Input.GetAxisRaw("Mouse ScrollWheel");
                 }
             }
         }
@@ -1632,6 +1632,18 @@ namespace Ex
             else
             {
                 return (min < val.x && val.x < max) && (min < val.y && val.y < max) && (min < val.z && val.z < max);
+            }
+        }
+
+        public static T Be<T>(this T self)
+        {
+            if (self != null)
+            {
+                return self;
+            }
+            else
+            {
+                throw new Exception("The value is null.");
             }
         }
     }
