@@ -24,6 +24,46 @@ namespace Ex
         A
     }
 
+    public enum Dir4
+    {
+        N,
+        W,
+        S,
+        E
+    }
+
+    public enum Dir8
+    {
+        N,
+        NW,
+        W,
+        SW,
+        S,
+        SE,
+        E,
+        NE
+    }
+
+    public enum Dir16
+    {
+        N,
+        NNW,
+        NW,
+        WNW,
+        W,
+        WSW,
+        SW,
+        SSW,
+        S,
+        SSE,
+        SE,
+        ESE,
+        E,
+        ENE,
+        NE,
+        NNE
+    }
+
     public static class Dbg
     {
         public static void Print<T>(T msg)
@@ -1685,6 +1725,203 @@ namespace Ex
         public static string ToStr<T>(this T self, string format = null) where T : Enum
         {
             return format == null ? self.ToString() : self.ToString(format);
+        }
+
+        public static Color ToColor(this uint self)
+        {
+            byte r = (byte)((self & 0xff000000) >> 24);
+            byte g = (byte)((self & 0x00ff0000) >> 16);
+            byte b = (byte)((self & 0x0000ff00) >> 8);
+            byte a = (byte)(self & 0x000000ff);
+
+            return new Color32(r, g, b, a);
+        }
+
+        public static uint ToUint(this Color32 self)
+        {
+            return (uint)self.r << 24 | (uint)self.g << 16 | (uint)self.b << 8 | self.a;
+        }
+
+        public static Dir4 ToDir4(this Vector2 self)
+        {
+            float theta = Mathf.Atan2(self.y, self.x) * Mathf.Rad2Deg;
+
+            if (-135 <= theta && theta < -45)
+            {
+                return Dir4.S;
+            }
+            else if (-45 <= theta && theta < 45)
+            {
+                return Dir4.E;
+            }
+            else if (45 <= theta && theta < 135)
+            {
+                return Dir4.N;
+            }
+            else
+            {
+                return Dir4.W;
+            }
+        }
+
+        public static Dir8 ToDir8(this Vector2 self)
+        {
+            float theta = Mathf.Atan2(self.y, self.x) * Mathf.Rad2Deg;
+
+            if (-157.5f <= theta && theta < -112.5f)
+            {
+                return Dir8.SW;
+            }
+            else if (-112.5f <= theta && theta < -67.5f)
+            {
+                return Dir8.S;
+            }
+            else if (-67.5f <= theta && theta < -22.5f)
+            {
+                return Dir8.SE;
+            }
+            else if (-22.5f <= theta && theta < 22.5f)
+            {
+                return Dir8.E;
+            }
+            else if (22.5f <= theta && theta < 67.5f)
+            {
+                return Dir8.NE;
+            }
+            else if (67.5f <= theta && theta < 112.5f)
+            {
+                return Dir8.N;
+            }
+            else if (112.5f <= theta && theta < 157.5f)
+            {
+                return Dir8.NW;
+            }
+            else
+            {
+                return Dir8.W;
+            }
+        }
+
+        public static Dir16 ToDir16(this Vector2 self)
+        {
+            float theta = Mathf.Atan2(self.y, self.x) * Mathf.Rad2Deg;
+
+            if (-168.75f <= theta && theta < -146.25f)
+            {
+                return Dir16.WSW;
+            }
+            else if (-146.25f <= theta && theta < -123.75f)
+            {
+                return Dir16.SW;
+            }
+            else if (-123.75f <= theta && theta < -101.25f)
+            {
+                return Dir16.SSW;
+            }
+            else if (-101.25f <= theta && theta < -78.75f)
+            {
+                return Dir16.S;
+            }
+            else if (-78.75f <= theta && theta < -56.25f)
+            {
+                return Dir16.SSE;
+            }
+            else if (-56.25f <= theta && theta < -33.75f)
+            {
+                return Dir16.SE;
+            }
+            else if (-33.75f <= theta && theta < -11.25f)
+            {
+                return Dir16.ESE;
+            }
+            else if (-11.25f <= theta && theta < 11.25f)
+            {
+                return Dir16.E;
+            }
+            if (11.25f <= theta && theta < 33.75f)
+            {
+                return Dir16.ENE;
+            }
+            else if (-33.75f <= theta && theta < 56.25f)
+            {
+                return Dir16.NE;
+            }
+            else if (56.25f <= theta && theta < 78.75f)
+            {
+                return Dir16.NNE;
+            }
+            else if (78.75f <= theta && theta < 101.25f)
+            {
+                return Dir16.N;
+            }
+            else if (101.25f <= theta && theta < 123.75f)
+            {
+                return Dir16.NNW;
+            }
+            else if (123.75f <= theta && theta < 146.25f)
+            {
+                return Dir16.NW;
+            }
+            else if (146.25f <= theta && theta < 168.75f)
+            {
+                return Dir16.WNW;
+            }
+            else
+            {
+                return Dir16.W;
+            }
+        }
+
+        public static Vector2 ToVec2(this Dir4 self)
+        {
+            return self switch
+            {
+                Dir4.N => Vector2.up,
+                Dir4.W => Vector2.left,
+                Dir4.S => Vector2.down,
+                Dir4.E => Vector2.right,
+                _ => throw new Exception("Invalid input.")
+            };
+        }
+
+        public static Vector2 ToVec2(this Dir8 self)
+        {
+            return self switch
+            {
+                Dir8.N => Vector2.up,
+                Dir8.NW => (Dir8.N.ToVec2() + Dir8.W.ToVec2()).normalized,
+                Dir8.W => Vector2.left,
+                Dir8.SW => (Dir8.S.ToVec2() + Dir8.W.ToVec2()).normalized,
+                Dir8.S => Vector2.down,
+                Dir8.SE => (Dir8.S.ToVec2() + Dir8.E.ToVec2()).normalized,
+                Dir8.E => Vector2.right,
+                Dir8.NE => (Dir8.N.ToVec2() + Dir8.E.ToVec2()).normalized,
+                _ => throw new Exception("Invalid input.")
+            };
+        }
+
+        public static Vector2 ToVec2(this Dir16 self)
+        {
+            return self switch
+            {
+                Dir16.N => Vector2.up,
+                Dir16.NNW => Quaternion.AngleAxis(-22.5f, Vector3.back) * Dir16.N.ToVec2(),
+                Dir16.NW => (Dir16.N.ToVec2() + Dir16.W.ToVec2()).normalized,
+                Dir16.WNW => Quaternion.AngleAxis(-22.5f, Vector3.back) * Dir16.NW.ToVec2(),
+                Dir16.W => Vector2.left,
+                Dir16.WSW => Quaternion.AngleAxis(-22.5f, Vector3.back) * Dir16.W.ToVec2(),
+                Dir16.SW => (Dir16.S.ToVec2() + Dir16.W.ToVec2()).normalized,
+                Dir16.SSW => Quaternion.AngleAxis(-22.5f, Vector3.back) * Dir16.SW.ToVec2(),
+                Dir16.S => Vector2.down,
+                Dir16.SSE => Quaternion.AngleAxis(-22.5f, Vector3.back) * Dir16.S.ToVec2(),
+                Dir16.SE => (Dir16.S.ToVec2() + Dir16.E.ToVec2()).normalized,
+                Dir16.ESE => Quaternion.AngleAxis(-22.5f, Vector3.back) * Dir16.SE.ToVec2(),
+                Dir16.E => Vector2.right,
+                Dir16.ENE => Quaternion.AngleAxis(-22.5f, Vector3.back) * Dir16.E.ToVec2(),
+                Dir16.NE => (Dir16.N.ToVec2() + Dir16.E.ToVec2()).normalized,
+                Dir16.NNE => Quaternion.AngleAxis(-22.5f, Vector3.back) * Dir16.NE.ToVec2(),
+                _ => throw new Exception("Invalid input.")
+            };
         }
     }
 
