@@ -64,7 +64,7 @@ namespace Ex
         NNE
     }
 
-    public static class Dbg
+    public static class OStream
     {
         public static void Print<T>(T msg)
         {
@@ -84,18 +84,20 @@ namespace Ex
 #endif
         }
 
-        public static void Show<T>(this T self)
+        public static T Show<T>(this T self)
         {
             Print(self);
+            return self;
         }
 
-        public static void Show<T>(this T self, string title)
+        public static T Show<T>(this T self, string title)
         {
             Print(title, self);
+            return self;
         }
     }
 
-    public static class Math
+    public static class Arith
     {
         /// <summary>Return "true" if the distance between "a" and "b" is larger than or equal to "d", else "false";</summary>
         public static bool CompareDistance(Vector3 a, Vector3 b, float d)
@@ -532,6 +534,30 @@ namespace Ex
                     return;
             }
         }
+
+        public static string Mul(this char txt, int num)
+        {
+            string ret = "";
+
+            for (int i = 0; i < num; i++)
+            {
+                ret += txt;
+            }
+
+            return ret;
+        }
+
+        public static string Mul(this string txt, int num)
+        {
+            string ret = "";
+
+            for (int i = 0; i < num; i++)
+            {
+                ret += txt;
+            }
+
+            return ret;
+        }
     }
 
     public static class Rand
@@ -587,27 +613,8 @@ namespace Ex
         }
     }
 
-    public static class Collection
+    public static class Itr
     {
-        public static List<T> ToList<T>(this IEnumerable<T> collection)
-        {
-            List<T> ret = new();
-
-            foreach (T e in collection)
-            {
-                ret.Add(e);
-            }
-            return ret;
-        }
-
-        public static IEnumerable<T> ToIEe<T>(this List<T> collection)
-        {
-            foreach (T e in collection)
-            {
-                yield return e;
-            }
-        }
-
         public static IEnumerable<int> Range(int stop)
         {
             for (int i = 0; i < stop; i += 1)
@@ -1326,43 +1333,6 @@ namespace Ex
         }
     }
 
-    public static class Tag
-    {
-        public static GameObject FindTag(this string self)
-        {
-            return GameObject.FindGameObjectWithTag(self);
-        }
-
-        public static T FindTag<T>(this string self) where T : Component
-        {
-            return GameObject.FindGameObjectWithTag(self).GetComponent<T>();
-        }
-
-        public static List<GameObject> FindsTag(this string self)
-        {
-            GameObject[] objsArray = GameObject.FindGameObjectsWithTag(self);
-
-            return new(objsArray);
-        }
-
-        public static List<T> FindsTag<T>(this string self) where T : Component
-        {
-            GameObject[] objs = GameObject.FindGameObjectsWithTag(self);
-
-            return Collection.Make(objs, (e) => e.GetComponent<T>()).ToList();
-        }
-
-        public static bool HasTag(this Collider self, string tag)
-        {
-            return self.CompareTag(tag);
-        }
-
-        public static bool HasTag(this Collision self, string tag)
-        {
-            return self.gameObject.CompareTag(tag);
-        }
-    }
-
     public static class UI
     {
         public static void OnClick(this Button button, UnityEngine.Events.UnityAction call)
@@ -1385,8 +1355,42 @@ namespace Ex
         }
     }
 
-    public static class Instance
+    public static class Obj
     {
+        public static GameObject FindTag(this string self)
+        {
+            return GameObject.FindGameObjectWithTag(self);
+        }
+
+        public static T FindTag<T>(this string self) where T : Component
+        {
+            return GameObject.FindGameObjectWithTag(self).GetComponent<T>();
+        }
+
+        public static List<GameObject> FindsTag(this string self)
+        {
+            GameObject[] objsArray = GameObject.FindGameObjectsWithTag(self);
+
+            return new(objsArray);
+        }
+
+        public static List<T> FindsTag<T>(this string self) where T : Component
+        {
+            GameObject[] objs = GameObject.FindGameObjectsWithTag(self);
+
+            return Itr.Make(objs, (e) => e.GetComponent<T>()).ToList();
+        }
+
+        public static bool HasTag(this Collider self, string tag)
+        {
+            return self.CompareTag(tag);
+        }
+
+        public static bool HasTag(this Collision self, string tag)
+        {
+            return self.gameObject.CompareTag(tag);
+        }
+
         public static GameObject GetChild(this GameObject self, int index)
         {
             return self.transform.GetChild(index).gameObject;
@@ -1430,7 +1434,7 @@ namespace Ex
         }
     }
 
-    public static class Ipt
+    public static class IStream
     {
         public static bool Up(this KeyCode keyCode)
         {
@@ -1553,7 +1557,7 @@ namespace Ex
         }
     }
 
-    public static class Condition
+    public static class IsBool
     {
         public static bool IsIn(this int val, int min, int max, bool isMinInclude = true, bool isMaxInclude = true)
         {
@@ -1688,35 +1692,27 @@ namespace Ex
         }
     }
 
-    public static class Str
+    public static class CastTo
     {
-        public static string Mul(this char txt, int num)
+        public static List<T> ToList<T>(this IEnumerable<T> collection)
         {
-            string ret = "";
+            List<T> ret = new();
 
-            for (int i = 0; i < num; i++)
+            foreach (T e in collection)
             {
-                ret += txt;
+                ret.Add(e);
             }
-
             return ret;
         }
 
-        public static string Mul(this string txt, int num)
+        public static IEnumerable<T> ToIEe<T>(this List<T> collection)
         {
-            string ret = "";
-
-            for (int i = 0; i < num; i++)
+            foreach (T e in collection)
             {
-                ret += txt;
+                yield return e;
             }
-
-            return ret;
         }
-    }
 
-    public static class Cast
-    {
         public static T ToEnum<T>(this string self, bool isIgnoreCase = false) where T : Enum
         {
             return (T)Enum.Parse(typeof(T), self, isIgnoreCase);

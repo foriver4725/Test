@@ -14,7 +14,7 @@ namespace CustomMethods
 
         void Start()
         {
-            
+
         }
 
         void Update()

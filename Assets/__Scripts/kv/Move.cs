@@ -26,7 +26,7 @@ namespace kv
 
         void Update()
         {
-            Vector2 _f = Ipt.AxisMove(isRaw: true);
+            Vector2 _f = Ex.IStream.AxisMove(isRaw: true);
             force = forcePower * new Vector3(_f.x, 0, _f.y);
             if (isStopSelfly && force == Vector3.zero) rb.velocity = Vector3.zero;
 
