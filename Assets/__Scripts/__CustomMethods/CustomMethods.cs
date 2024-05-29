@@ -64,7 +64,7 @@ namespace Ex
         NNE
     }
 
-    public static class OStream
+    public static class IO
     {
         public static void Print<T>(T msg)
         {
@@ -94,6 +94,126 @@ namespace Ex
         {
             Print(title, self);
             return self;
+        }
+
+        public static bool Up(this KeyCode keyCode)
+        {
+            return Input.GetKeyUp(keyCode);
+        }
+
+        public static bool Down(this KeyCode keyCode)
+        {
+            return Input.GetKeyDown(keyCode);
+        }
+
+        public static bool Stay(this KeyCode keyCode)
+        {
+            return Input.GetKey(keyCode);
+        }
+
+        public static bool MouseUp(this int index)
+        {
+            return Input.GetMouseButtonUp(index);
+        }
+
+        public static bool MouseDown(this int index)
+        {
+            return Input.GetMouseButtonDown(index);
+        }
+
+        public static bool MouseStay(this int index)
+        {
+            return Input.GetMouseButton(index);
+        }
+
+        public static Vector2 AxisMove(bool isRaw = false, bool isNormalized = true)
+        {
+            if (!isRaw)
+            {
+                float h = Input.GetAxis("Horizontal");
+                float v = Input.GetAxis("Vertical");
+
+                if (isNormalized)
+                {
+                    return new Vector2(h, v).normalized;
+                }
+                else
+                {
+                    return new(h, v);
+                }
+            }
+            else
+            {
+                float h = Input.GetAxisRaw("Horizontal");
+                float v = Input.GetAxisRaw("Vertical");
+
+                if (isNormalized)
+                {
+                    return new Vector2(h, v).normalized;
+                }
+                else
+                {
+                    return new(h, v);
+                }
+            }
+        }
+
+        public static Vector2 AxisMouse(bool isRaw = false, bool isNormalized = true)
+        {
+            if (!isRaw)
+            {
+                float x = Input.GetAxis("Mouse X");
+                float y = Input.GetAxis("Mouse Y");
+
+                if (isNormalized)
+                {
+                    return new Vector2(x, y).normalized;
+                }
+                else
+                {
+                    return new(x, y);
+                }
+            }
+            else
+            {
+                float x = Input.GetAxisRaw("Mouse X");
+                float y = Input.GetAxisRaw("Mouse Y");
+
+                if (isNormalized)
+                {
+                    return new Vector2(x, y).normalized;
+                }
+                else
+                {
+                    return new(x, y);
+                }
+            }
+        }
+
+        public static float AxisWheel(bool isRaw = false, bool isNormalized = true)
+        {
+            if (!isRaw)
+            {
+                if (isNormalized)
+                {
+                    return Input.GetAxis("Mouse ScrollWheel").Rounded2();
+                }
+                else
+                {
+                    return Input.GetAxis("Mouse ScrollWheel");
+                }
+            }
+            else
+            {
+                if (isNormalized)
+                {
+                    return Input.GetAxisRaw("Mouse ScrollWheel").Rounded2();
+                }
+                else
+                {
+                    return Input.GetAxisRaw("Mouse ScrollWheel");
+                }
+            }
         }
     }
 
@@ -557,6 +677,77 @@ namespace Ex
             }
 
             return ret;
+        }
+
+        // Clockwise is positive.
+        public static Vector2 Rot(this Vector2 self, float angle)
+        {
+            return Quaternion.AngleAxis(angle, Vector3.back) * self;
+        }
+
+        // Clockwise is positive.
+        public static Vector3 Rot(this Vector3 self, float angle, Vector3 axis)
+        {
+            return Quaternion.AngleAxis(angle, axis) * self;
+        }
+
+        // Coef should be [0, 1].
+        public static uint Dil(this uint self, float coef, bool isIgnoreA = true)
+        {
+            if (isIgnoreA)
+            {
+                byte r = (byte)((self & 0xff000000) >> 24);
+                byte g = (byte)((self & 0x00ff0000) >> 16);
+                byte b = (byte)((self & 0x0000ff00) >> 8);
+                byte a = (byte)(self & 0x000000ff);
+
+                r = (byte)(r * coef);
+                g = (byte)(g * coef);
+                b = (byte)(b * coef);
+
+                return (uint)(r << 24 | g << 16 | b << 8 | a);
+            }
+            else
+            {
+                byte r = (byte)((self & 0xff000000) >> 24);
+                byte g = (byte)((self & 0x00ff0000) >> 16);
+                byte b = (byte)((self & 0x0000ff00) >> 8);
+                byte a = (byte)(self & 0x000000ff);
+
+                r = (byte)(r * coef);
+                g = (byte)(g * coef);
+                b = (byte)(b * coef);
+                a = (byte)(a * coef);
+
+                return (uint)(r << 24 | g << 16 | b << 8 | a);
+            }
+        }
+
+        // Coef should be [0, 1].
+        public static Color32 Dil(this Color32 self, float coef, bool isIgnoreA = true)
+        {
+            if (isIgnoreA)
+            {
+                Color32 ret = new();
+
+                ret.r = (byte)(self.r * coef);
+                ret.g = (byte)(self.g * coef);
+                ret.b = (byte)(self.b * coef);
+                ret.a = self.a;
+
+                return ret;
+            }
+            else
+            {
+                Color32 ret = new();
+
+                ret.r = (byte)(self.r * coef);
+                ret.g = (byte)(self.g * coef);
+                ret.b = (byte)(self.b * coef);
+                ret.a = (byte)(self.a * coef);
+
+                return ret;
+            }
         }
     }
 
@@ -1434,129 +1625,6 @@ namespace Ex
         }
     }
 
-    public static class IStream
-    {
-        public static bool Up(this KeyCode keyCode)
-        {
-            return Input.GetKeyUp(keyCode);
-        }
-
-        public static bool Down(this KeyCode keyCode)
-        {
-            return Input.GetKeyDown(keyCode);
-        }
-
-        public static bool Stay(this KeyCode keyCode)
-        {
-            return Input.GetKey(keyCode);
-        }
-
-        public static bool MouseUp(this int index)
-        {
-            return Input.GetMouseButtonUp(index);
-        }
-
-        public static bool MouseDown(this int index)
-        {
-            return Input.GetMouseButtonDown(index);
-        }
-
-        public static bool MouseStay(this int index)
-        {
-            return Input.GetMouseButton(index);
-        }
-
-        public static Vector2 AxisMove(bool isRaw = false, bool isNormalized = true)
-        {
-            if (!isRaw)
-            {
-                float h = Input.GetAxis("Horizontal");
-                float v = Input.GetAxis("Vertical");
-
-                if (isNormalized)
-                {
-                    return new Vector2(h, v).normalized;
-                }
-                else
-                {
-                    return new(h, v);
-                }
-            }
-            else
-            {
-                float h = Input.GetAxisRaw("Horizontal");
-                float v = Input.GetAxisRaw("Vertical");
-
-                if (isNormalized)
-                {
-                    return new Vector2(h, v).normalized;
-                }
-                else
-                {
-                    return new(h, v);
-                }
-            }
-        }
-
-        public static Vector2 AxisMouse(bool isRaw = false, bool isNormalized = true)
-        {
-            if (!isRaw)
-            {
-                float x = Input.GetAxis("Mouse X");
-                float y = Input.GetAxis("Mouse Y");
-
-                if (isNormalized)
-                {
-                    return new Vector2(x, y).normalized;
-                }
-                else
-                {
-                    return new(x, y);
-                }
-            }
-            else
-            {
-                float x = Input.GetAxisRaw("Mouse X");
-                float y = Input.GetAxisRaw("Mouse Y");
-
-                if (isNormalized)
-                {
-                    return new Vector2(x, y).normalized;
-                }
-                else
-                {
-                    return new(x, y);
-                }
-            }
-        }
-
-        public static float AxisWheel(bool isRaw = false, bool isNormalized = true)
-        {
-            if (!isRaw)
-            {
-                if (isNormalized)
-                {
-                    return Input.GetAxis("Mouse ScrollWheel").Rounded2();
-                }
-                else
-                {
-                    return Input.GetAxis("Mouse ScrollWheel");
-                }
-            }
-            else
-            {
-                if (isNormalized)
-                {
-                    return Input.GetAxisRaw("Mouse ScrollWheel").Rounded2();
-                }
-                else
-                {
-                    return Input.GetAxisRaw("Mouse ScrollWheel");
-                }
-            }
-        }
-    }
-
     public static class IsBool
     {
         public static bool IsIn(this int val, int min, int max, bool isMinInclude = true, bool isMaxInclude = true)
@@ -1694,6 +1762,11 @@ namespace Ex
 
     public static class CastTo
     {
+        public static T To<T>(this IConvertible self)
+        {
+            return (T)Convert.ChangeType(self, typeof(T));
+        }
+
         public static List<T> ToList<T>(this IEnumerable<T> collection)
         {
             List<T> ret = new();
@@ -1740,23 +1813,27 @@ namespace Ex
 
         public static Dir4 ToDir4(this Vector2 self)
         {
-            float theta = Mathf.Atan2(self.y, self.x) * Mathf.Rad2Deg;
+            Vector2 axis1 = new(-1, -1);
+            Vector2 axis2 = new(1, -1);
 
-            if (-135 <= theta && theta < -45)
+            float dot1 = Vector2.Dot(self, axis1);
+            float dot2 = Vector2.Dot(self, axis2);
+
+            if (dot1 >= 0 && dot2 >= 0)
             {
                 return Dir4.S;
             }
-            else if (-45 <= theta && theta < 45)
+            else if (dot1 >= 0 && dot2 < 0)
+            {
+                return Dir4.W;
+            }
+            else if (dot1 < 0 && dot2 >= 0)
             {
                 return Dir4.E;
             }
-            else if (45 <= theta && theta < 135)
-            {
-                return Dir4.N;
-            }
             else
             {
-                return Dir4.W;
+                return Dir4.N;
             }
         }
 
@@ -1918,6 +1995,36 @@ namespace Ex
                 Dir16.NNE => Quaternion.AngleAxis(-22.5f, Vector3.back) * Dir16.NE.ToVec2(),
                 _ => throw new Exception("Invalid input.")
             };
+        }
+
+        public static Vector3 ToOXY(this Vector2 self)
+        {
+            return new(0, self.x, self.y);
+        }
+
+        public static Vector3 ToXOY(this Vector2 self)
+        {
+            return new(self.x, 0, self.y);
+        }
+
+        public static Vector3 ToXYO(this Vector2 self)
+        {
+            return new(self.x, self.y, 0);
+        }
+
+        public static Vector3Int ToOXY(this Vector2Int self)
+        {
+            return new(0, self.x, self.y);
+        }
+
+        public static Vector3Int ToXOY(this Vector2Int self)
+        {
+            return new(self.x, 0, self.y);
+        }
+
+        public static Vector3Int ToXYO(this Vector2Int self)
+        {
+            return new(self.x, self.y, 0);
         }
     }
 
