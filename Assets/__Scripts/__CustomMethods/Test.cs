@@ -7,10 +7,12 @@ namespace CustomMethods
 {
     public class Test : MonoBehaviour
     {
+        #region
         void Awake()
         {
             enabled = true;
         }
+        #endregion
 
         void Start()
         {

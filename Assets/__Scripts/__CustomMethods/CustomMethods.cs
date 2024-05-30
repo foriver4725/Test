@@ -66,19 +66,25 @@ namespace Ex
 
     public static class IO
     {
-        public static void Print<T>(T msg)
+        public static void Print(params object[] msgs)
         {
 #if UNITY_EDITOR && true
-            Debug.Log(msg);
+            foreach (object msg in msgs)
+            {
+                Debug.Log(msg);
+            }
 #else
             return;
 #endif
         }
 
-        public static void Print<T>(string title, T msg)
+        public static void Print(params (string title, object content)[] msgs)
         {
 #if UNITY_EDITOR && true
-            Debug.Log($"{title}:{msg}");
+            foreach ((string title, object content) msg in msgs)
+            {
+                Debug.Log($"{msg.title}: {msg.content}");
+            }
 #else
             return;
 #endif
@@ -92,7 +98,7 @@ namespace Ex
 
         public static T Show<T>(this T self, string title)
         {
-            Print(title, self);
+            Print((title, self));
             return self;
         }
 
@@ -753,7 +759,7 @@ namespace Ex
 
     public static class Rand
     {
-        public static bool RandomBool()
+        public static bool RandBl()
         {
             return RandInt(0, 1) == 0;
         }
@@ -763,44 +769,61 @@ namespace Ex
             return Random.Range(min, max + 1);
         }
 
-        public static float RandFloat(float min, float max)
+        public static float RandFlt(float min, float max)
         {
             return Random.Range(min, max);
         }
 
-        public static Vector2 RandSquare(float sizeX, float sizeY)
+        public static Vector2 RandInSq(float sizeX, float sizeY)
         {
-            return new(RandFloat(0, sizeX), RandFloat(0, sizeY));
+            return new(RandFlt(0, sizeX), RandFlt(0, sizeY));
         }
 
-        public static Vector2Int RandSquare(int sizeX, int sizeY)
+        public static Vector2Int RandInSq(int sizeX, int sizeY)
         {
             return new(RandInt(0, sizeX), RandInt(0, sizeY));
         }
 
         /// <param name="sizeR">sizeR >= 0</param>
-        public static Vector2 RandCircle(float sizeR)
+        public static Vector2 RandOnCi(float sizeR)
         {
-            float theta = RandFloat(0, 2 * Mathf.PI);
+            float theta = RandFlt(0, 2 * Mathf.PI);
             return new Vector2(theta.Cos(), theta.Sin()) * sizeR;
         }
 
-        public static Vector3 RandCube(float sizeX, float sizeY, float sizeZ)
+        /// <param name="maxR">maxR >= 0</param>
+        public static Vector2 RandInCi(float maxR)
         {
-            return new(RandFloat(0, sizeX), RandFloat(0, sizeY), RandFloat(0, sizeZ));
+            float r = RandFlt(0, maxR);
+            float theta = RandFlt(0, 2 * Mathf.PI);
+            return new Vector2(theta.Cos(), theta.Sin()) * r;
         }
 
-        public static Vector3Int RandCube(int sizeX, int sizeY, int sizeZ)
+        public static Vector3 RandInCu(float sizeX, float sizeY, float sizeZ)
+        {
+            return new(RandFlt(0, sizeX), RandFlt(0, sizeY), RandFlt(0, sizeZ));
+        }
+
+        public static Vector3Int RandInCu(int sizeX, int sizeY, int sizeZ)
         {
             return new(RandInt(0, sizeX), RandInt(0, sizeY), RandInt(0, sizeZ));
         }
 
         /// <param name="sizeR">sizeR >= 0</param>
-        public static Vector3 RandSphere(float sizeR)
+        public static Vector3 RandOnSp(float sizeR)
         {
-            float theta = RandFloat(0, Mathf.PI);
-            float phi = RandFloat(0, 2 * Mathf.PI);
+            float theta = RandFlt(0, Mathf.PI);
+            float phi = RandFlt(0, 2 * Mathf.PI);
             return new Vector3(theta.Sin() * phi.Cos(), theta.Sin() * phi.Sin(), theta.Cos()) * sizeR;
+        }
+
+        /// <param name="maxR">maxR >= 0</param>
+        public static Vector3 RandInSp(float maxR)
+        {
+            float r = RandFlt(0, maxR);
+            float theta = RandFlt(0, Mathf.PI);
+            float phi = RandFlt(0, 2 * Mathf.PI);
+            return new Vector3(theta.Sin() * phi.Cos(), theta.Sin() * phi.Sin(), theta.Cos()) * r;
         }
     }
 
