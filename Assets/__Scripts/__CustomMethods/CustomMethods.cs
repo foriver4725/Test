@@ -749,6 +749,16 @@ namespace Ex
                 return ret;
             }
         }
+
+        public static Type T(this Type self)
+        {
+            return self.GetType();
+        }
+
+        public static Type T(this object self)
+        {
+            return self.GetType();
+        }
     }
 
     public static class Rand
@@ -1765,6 +1775,56 @@ namespace Ex
         public static T To<T>(this IConvertible self)
         {
             return (T)Convert.ChangeType(self, typeof(T));
+        }
+
+        public static int ToInt(this string self)
+        {
+            return int.Parse(self);
+        }
+
+        public static float ToFlt(this string self)
+        {
+            return float.Parse(self);
+        }
+
+        public static string ToStr(this int self)
+        {
+            return self.ToString();
+        }
+
+        public static string ToStr(this int self, IFormatProvider IF)
+        {
+            return self.ToString(IF);
+        }
+
+        public static string ToStr(this int self, string str)
+        {
+            return self.ToString(str);
+        }
+
+        public static string ToStr(this int self, string str, IFormatProvider IF)
+        {
+            return self.ToString(str, IF);
+        }
+
+        public static string ToStr(this float self)
+        {
+            return self.ToString();
+        }
+
+        public static string ToStr(this float self, IFormatProvider IF)
+        {
+            return self.ToString(IF);
+        }
+
+        public static string ToStr(this float self, string str)
+        {
+            return self.ToString(str);
+        }
+
+        public static string ToStr(this float self, string str, IFormatProvider IF)
+        {
+            return self.ToString(str, IF);
         }
 
         public static List<T> ToList<T>(this IEnumerable<T> collection)
