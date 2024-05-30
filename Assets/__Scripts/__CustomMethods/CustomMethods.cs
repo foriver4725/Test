@@ -749,16 +749,6 @@ namespace Ex
                 return ret;
             }
         }
-
-        public static Type T(this Type self)
-        {
-            return self.GetType();
-        }
-
-        public static Type T(this object self)
-        {
-            return self.GetType();
-        }
     }
 
     public static class Rand
@@ -1632,6 +1622,11 @@ namespace Ex
         public static T GGCC<T>(this GameObject self, params int[] grandsChildIndices) where T : Component
         {
             return self.GetGrandsChildComponent<T>(grandsChildIndices);
+        }
+
+        public static Type T(this object self)
+        {
+            return self.GetType();
         }
     }
 
