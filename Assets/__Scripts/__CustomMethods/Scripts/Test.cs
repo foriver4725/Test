@@ -8,18 +8,18 @@ namespace CustomMethods
     public class Test : MonoBehaviour
     {
         #region
-        void Awake()
+        private void Awake()
         {
             enabled = true;
         }
         #endregion
 
-        void Start()
+        private void Start()
         {
 
         }
 
-        void Update()
+        private void Update()
         {
 
         }

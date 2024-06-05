@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 
 namespace Ex
@@ -1545,6 +1548,12 @@ namespace Ex
             Application.Quit();
 #endif
         }
+
+        [MenuItem("File/Restart %#&r")]
+        private static void RestartEditor()
+        {
+            EditorApplication.OpenProject(Directory.GetCurrentDirectory());
+        }
     }
 
     public static class UI
@@ -2248,5 +2257,61 @@ namespace Ex
         public static readonly Color WhiteSmoke = new Color32(245, 245, 245, 255);
         public static readonly Color Yellow = new Color32(255, 255, 0, 255);
         public static readonly Color YellowGreen = new Color32(154, 205, 50, 255);
+    }
+
+    static internal class CustomMenuItem
+    {
+        private const int MENU_ITEM_PRIORITY = -10000;
+        private const string MENU_ITEM_ROOT_PATH = "Assets/Create/Scripts";
+        private const string MENU_ITEM_Empty_PATH = "Empty";
+        private const string MENU_ITEM_MonoBehaviour_PATH = "MonoBehaviour";
+        private const string MENU_ITEM_ScriptableObject_PATH = "ScriptableObject";
+        private const string MENU_ITEM_GameManager_PATH = "GameManager";
+        private const string MENU_ITEM_InputGetter_PATH = "InputGetter";
+        private const string MENU_ITEM_GameStateSetter_PATH = "GameStateSetter";
+
+        private const string TEMPLATE_FOLDER_PATH = "Assets/__Scripts/__CustomMethods/ScriptTemplates";
+        private const string TEMPLATE_Empty_PATH = "EmptyScriptTemplate.txt";
+        private const string TEMPLATE_MonoBehaviour_PATH = "MonoBehaviourScriptTemplate.txt";
+        private const string TEMPLATE_ScriptableObject_PATH = "ScriptableObjectScriptTemplate.txt";
+        private const string TEMPLATE_GameManager_PATH = "GameManagerScriptTemplate.txt";
+
+        private const string NEW_Empty_NAME = "X.cs";
+        private const string NEW_MonoBehaviour_NAME = "X.cs";
+        private const string NEW_ScriptableObject_NAME = "SO_X.cs";
+        private const string NEW_GameManager_NAME = "GameManager.cs";
+
+        [MenuItem(MENU_ITEM_ROOT_PATH + "/" + MENU_ITEM_Empty_PATH, priority = MENU_ITEM_PRIORITY)]
+        private static void CreateEmpty() => CreateScript
+            (
+            $"{TEMPLATE_FOLDER_PATH}/{TEMPLATE_Empty_PATH}",
+            NEW_Empty_NAME
+            );
+
+        [MenuItem(MENU_ITEM_ROOT_PATH + "/" + MENU_ITEM_MonoBehaviour_PATH, priority = MENU_ITEM_PRIORITY)]
+        private static void CreateMonoBehaviourScript() => CreateScript
+            (
+            $"{TEMPLATE_FOLDER_PATH}/{TEMPLATE_MonoBehaviour_PATH}",
+            NEW_MonoBehaviour_NAME
+            );
+
+        [MenuItem(MENU_ITEM_ROOT_PATH + "/" + MENU_ITEM_ScriptableObject_PATH, priority = MENU_ITEM_PRIORITY)]
+        private static void CreateScriptableObjectScript() => CreateScript
+            (
+            $"{TEMPLATE_FOLDER_PATH}/{TEMPLATE_ScriptableObject_PATH}",
+            NEW_ScriptableObject_NAME
+            );
+
+        [MenuItem(MENU_ITEM_ROOT_PATH + "/" + MENU_ITEM_GameManager_PATH, priority = MENU_ITEM_PRIORITY)]
+        private static void CreateGameManager() => CreateScript
+            (
+            $"{TEMPLATE_FOLDER_PATH}/{TEMPLATE_GameManager_PATH}",
+            NEW_GameManager_NAME
+            );
+
+        private static void CreateScript(string templateFilePath, string newScriptName)
+        {
+            ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templateFilePath, newScriptName);
+        }
     }
 }
