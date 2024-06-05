@@ -1,33 +1,23 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace SO
+namespace XXXXX
 {
-    [CreateAssetMenu(menuName = "SO/#SCRIPTNAME#", fileName = "#SCRIPTNAME#")]
-    public class #SCRIPTNAME# : ScriptableObject
+    public class GameManager : MonoBehaviour
     {
-        #region QOL向上処理
-        // CakeParamsSOが保存してある場所のパス
-        public const string PATH = "#SCRIPTNAME#";
+        #region
+        public static GameManager Instance { get; set; } = null;
 
-        // CakeParamsSOの実体
-        private static #SCRIPTNAME# _entity = null;
-        public static #SCRIPTNAME# Entity
+        private void Awake()
         {
-            get
+            if (Instance == null)
             {
-                // 初アクセス時にロードする
-                if (_entity == null)
-                {
-                    _entity = Resources.Load<#SCRIPTNAME#>(PATH);
-
-                    //ロード出来なかった場合はエラーログを表示
-                    if (_entity == null)
-                    {
-                        Debug.LogError(PATH + " not found");
-                    }
-                }
-
-                return _entity;
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
             }
         }
         #endregion
