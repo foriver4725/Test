@@ -1543,7 +1543,7 @@ namespace Ex
         public static void Quit()
         {
 #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
+            EditorApplication.isPlaying = false;
 #else
             Application.Quit();
 #endif
@@ -1659,6 +1659,11 @@ namespace Ex
         public static Type T(this object self)
         {
             return self.GetType();
+        }
+
+        public static bool IsT<T>(this object self)
+        {
+            return self.GetType() == typeof(T);
         }
     }
 
