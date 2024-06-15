@@ -878,8 +878,8 @@ namespace Ex
 
                 while (IEr.MoveNext())
                 {
-                    i++;
                     yield return (i, IEr.Current);
+                    i++;
                 }
             }
         }
