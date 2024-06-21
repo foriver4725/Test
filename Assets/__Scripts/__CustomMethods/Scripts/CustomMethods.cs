@@ -1585,7 +1585,7 @@ namespace Ex
             return GameObject.FindGameObjectWithTag(self);
         }
 
-        public static T FindTag<T>(this string self) where T : Component
+        public static T FindTag<T>(this string self)
         {
             return GameObject.FindGameObjectWithTag(self).GetComponent<T>();
         }
@@ -1597,7 +1597,7 @@ namespace Ex
             return new(objsArray);
         }
 
-        public static List<T> FindsTag<T>(this string self) where T : Component
+        public static List<T> FindsTag<T>(this string self)
         {
             GameObject[] objs = GameObject.FindGameObjectsWithTag(self);
 
@@ -1631,27 +1631,27 @@ namespace Ex
             return retTf.gameObject;
         }
 
-        public static T GetChildComponent<T>(this GameObject self, int childIndex) where T : Component
+        public static T GetChildComponent<T>(this GameObject self, int childIndex)
         {
             return self.transform.GetChild(childIndex).GetComponent<T>();
         }
 
-        public static T GetGrandsChildComponent<T>(this GameObject self, params int[] grandsChildIndices) where T : Component
+        public static T GetGrandsChildComponent<T>(this GameObject self, params int[] grandsChildIndices)
         {
             return self.GetGrandsChild(grandsChildIndices).GetComponent<T>();
         }
 
-        public static T GC<T>(this GameObject self) where T : Component
+        public static T GC<T>(this GameObject self)
         {
             return self.GetComponent<T>();
         }
 
-        public static T GCC<T>(this GameObject self, int childIndex) where T : Component
+        public static T GCC<T>(this GameObject self, int childIndex)
         {
             return self.GetChildComponent<T>(childIndex);
         }
 
-        public static T GGCC<T>(this GameObject self, params int[] grandsChildIndices) where T : Component
+        public static T GGCC<T>(this GameObject self, params int[] grandsChildIndices)
         {
             return self.GetGrandsChildComponent<T>(grandsChildIndices);
         }
