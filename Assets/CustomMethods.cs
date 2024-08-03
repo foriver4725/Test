@@ -2275,7 +2275,7 @@ namespace Ex
         private const string MENU_ITEM_InputGetter_PATH = "InputGetter";
         private const string MENU_ITEM_GameStateSetter_PATH = "GameStateSetter";
 
-        private const string TEMPLATE_FOLDER_PATH = "Assets/__Scripts/ScriptTemplates";
+        private const string TEMPLATE_FOLDER_PATH = "Assets/ScriptTemplates";
         private const string TEMPLATE_Empty_PATH = "EmptyScriptTemplate.txt";
         private const string TEMPLATE_MonoBehaviour_PATH = "MonoBehaviourScriptTemplate.txt";
         private const string TEMPLATE_ScriptableObject_PATH = "ScriptableObjectScriptTemplate.txt";
