@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Ex;
-
 namespace CustomMethods
 {
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+    using Ex;
+
     public class Test : MonoBehaviour
     {
         #region
