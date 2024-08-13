@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace XXXXX
 {
-    public class GameManager : MonoBehaviour
+    public sealed class GameManager : MonoBehaviour
     {
         #region
         public static GameManager Instance { get; set; } = null;

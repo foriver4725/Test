@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace XXXXX
 {
-    public class GameStateSetter
+    public sealed class GameStateSetter
     {
         [RuntimeInitializeOnLoadMethod]
         static void RuntimeInitializeOnLoadMethods()

@@ -3,7 +3,7 @@ using UnityEngine;
 namespace SO
 {
     [CreateAssetMenu(menuName = "SO/#SCRIPTNAME#", fileName = "#SCRIPTNAME#")]
-    public class #SCRIPTNAME# : ScriptableObject
+    public sealed class #SCRIPTNAME# : ScriptableObject
     {
         #region
         public const string PATH = "#SCRIPTNAME#";

@@ -1,16 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace XXXXX
 {
-    public class #SCRIPTNAME# : MonoBehaviour
+    public sealed class #SCRIPTNAME# : MonoBehaviour
     {
-        private void Start()
-        {
-            #NOTRIM#
-        }
-
         private void Update()
         {
             #NOTRIM#

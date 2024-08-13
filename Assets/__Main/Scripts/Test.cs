@@ -5,7 +5,7 @@ using Ex;
 
 namespace CustomMethods
 {
-    public class Test : MonoBehaviour
+    public sealed class Test : MonoBehaviour
     {
         #region
         private void Awake()
