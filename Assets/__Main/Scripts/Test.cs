@@ -5,6 +5,8 @@ using Ex;
 
 namespace CustomMethods
 {
+    #region
+
     internal sealed class Test : MonoBehaviour
     {
         [SerializeField] private TMPro.TextMeshProUGUI debugText;
@@ -31,23 +33,35 @@ namespace CustomMethods
     internal sealed class TestBhv : System.IDisposable
     {
         private Debug debug;
+        private Main main;
+
+        private bool isFirstUpdate = true;
 
         internal TestBhv(TMPro.TextMeshProUGUI debugText)
         {
             debug = new(debugText);
+            main = new();
         }
 
         public void Dispose()
         {
             debug.Dispose();
             debug = null;
+            main = null;
         }
 
         internal void Update()
         {
             if (debug.IsNullExist()) return;
 
+            if (isFirstUpdate)
+            {
+                main.Start();
+                isFirstUpdate = false;
+            }
+
             debug.UpdateDebugText();
+            main.Update();
         }
     }
 
@@ -113,6 +127,27 @@ namespace CustomMethods
         internal static float ByteToMegabyte(this long n)
         {
             return (n >> 10) / 1024f;
+        }
+    }
+
+    #endregion
+
+    internal sealed class Main
+    {
+        #region
+
+        internal Main() { }
+
+        #endregion
+
+        internal void Start()
+        {
+
+        }
+
+        internal void Update()
+        {
+
         }
     }
 }
