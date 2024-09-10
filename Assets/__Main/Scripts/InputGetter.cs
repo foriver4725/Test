@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Interface;
 
 namespace IA
 {
@@ -17,14 +19,23 @@ namespace IA
         Value3
     }
 
-    public sealed class InputInfo
+    public sealed class InputInfo : IDisposable, INullExistable
     {
+        private InputAction inputAction;
+        private readonly InputType type;
+        private List<Action<InputAction.CallbackContext>> action;
+
+        private bool val0 = false;
+        private float val1 = 0;
+        private Vector2 val2 = Vector2.zero;
+        private Vector3 val3 = Vector3.zero;
+
         public InputInfo(InputAction inputAction, InputType type)
         {
             this.inputAction = inputAction;
             this.type = type;
 
-            action = this.type switch
+            this.action = this.type switch
             {
                 InputType.Null
                 => null,
@@ -45,14 +56,18 @@ namespace IA
             };
         }
 
-        private readonly InputAction inputAction = null;
-        private readonly InputType type = InputType.Null;
-        private readonly List<System.Action<InputAction.CallbackContext>> action = null;
+        public void Dispose()
+        {
+            inputAction = null;
+            action = null;
+        }
 
-        private bool val0 = false;
-        private float val1 = 0;
-        private Vector2 val2 = Vector2.zero;
-        private Vector3 val3 = Vector3.zero;
+        public bool IsNullExist()
+        {
+            if (inputAction == null) return true;
+            if (action == null) return true;
+            return false;
+        }
 
         public T Get<T>()
         {
@@ -73,6 +88,9 @@ namespace IA
 
         public void Link(bool isLink)
         {
+            if (inputAction == null) return;
+            if (action == null) return;
+
             if (isLink)
             {
                 switch (type)
@@ -186,72 +204,52 @@ namespace IA
     {
         #region
 
-        IA _inputs = null;
-
+        private IA ia;
+        private List<InputInfo> inputInfoList;
         public static InputGetter Instance { get; set; } = null;
-
-        private readonly List<InputInfo> inputInfoList = new();
 
         private void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            if (Instance == null) Instance = this;
+            else Destroy(gameObject);
 
-            _inputs = new IA();
+            ia = new();
+            inputInfoList = new();
 
             Init();
 
-            foreach (InputInfo e in inputInfoList)
-            {
-                e.Link(true);
-            }
+            foreach (InputInfo e in inputInfoList) e.Link(true);
         }
+        private void OnDestroy()
+        {
+            foreach (InputInfo e in inputInfoList) e.Link(false);
+
+            ia.Dispose();
+            foreach (InputInfo e in inputInfoList) e.Dispose();
+
+            ia = null;
+            inputInfoList = null;
+        }
+
+        private void OnEnable() => ia.Enable();
+        private void OnDisable() => ia.Disable();
 
         private void LateUpdate()
         {
-            foreach (InputInfo e in inputInfoList)
-            {
-                e.OnLateUpdate();
-            }
-        }
-
-        private void OnEnable()
-        {
-            _inputs.Enable();
-        }
-
-        private void OnDisable()
-        {
-            _inputs.Disable();
-        }
-
-        private void OnDestroy()
-        {
-            foreach (InputInfo e in inputInfoList)
-            {
-                e.Link(false);
-            }
-
-            _inputs.Dispose();
+            foreach (InputInfo e in inputInfoList) e.OnLateUpdate();
         }
 
         #endregion
 
-        public InputInfo Main_Click { get; private set; } = null;
-        public InputInfo Main_Hold { get; private set; } = null;
-        public InputInfo Main_Value2 { get; private set; } = null;
+        public InputInfo Main_Click { get; private set; }
+        public InputInfo Main_Hold { get; private set; }
+        public InputInfo Main_Value2 { get; private set; }
 
         private void Init()
         {
-            Main_Click = new InputInfo(_inputs.Main.Click, InputType.Click).Add(inputInfoList);
-            Main_Hold = new InputInfo(_inputs.Main.Hold, InputType.Hold).Add(inputInfoList);
-            Main_Value2 = new InputInfo(_inputs.Main.Value, InputType.Value2).Add(inputInfoList);
+            Main_Click = new InputInfo(ia.Main.Click, InputType.Click).Add(inputInfoList);
+            Main_Hold = new InputInfo(ia.Main.Hold, InputType.Hold).Add(inputInfoList);
+            Main_Value2 = new InputInfo(ia.Main.Value, InputType.Value2).Add(inputInfoList);
         }
     }
 }
