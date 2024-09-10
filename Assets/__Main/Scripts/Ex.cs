@@ -66,41 +66,54 @@ namespace Ex
         NNE
     }
 
+    public enum ClientTypeRaw
+    {
+        Editor,
+        Build
+    }
+
+    public enum ClientType
+    {
+        Editor_Editing,
+        Editor_Playing,
+        Build_Debug,
+        Build_Release
+    }
+
+    public static class Client
+    {
+        public static new ClientType GetType()
+        {
+#if UNITY_EDITOR && true
+            return EditorApplication.isPlaying ? ClientType.Editor_Playing : ClientType.Editor_Editing;
+#else
+            return Debug.isDebugBuild ? ClientType.Build_Debug : ClientType.Build_Release;
+#endif
+        }
+
+        public static ClientTypeRaw GetRaw(this ClientType type)
+        {
+            if (type == ClientType.Editor_Editing || type == ClientType.Editor_Playing) return ClientTypeRaw.Editor;
+            else if (type == ClientType.Build_Debug || type == ClientType.Build_Release) return ClientTypeRaw.Build;
+            else throw new Exception("ïsê≥Ç»éÌóﬁÇ≈Ç∑");
+        }
+    }
+
     public static class IO
     {
-        public static void Print(params object[] msgs)
-        {
-#if UNITY_EDITOR && true
-            foreach (object msg in msgs)
-            {
-                Debug.Log(msg);
-            }
-#else
-            return;
-#endif
-        }
-
-        public static void Print(params (string title, object content)[] msgs)
-        {
-#if UNITY_EDITOR && true
-            foreach ((string title, object content) msg in msgs)
-            {
-                Debug.Log($"{msg.title}: {msg.content}");
-            }
-#else
-            return;
-#endif
-        }
-
         public static T Show<T>(this T self)
         {
-            Print(self);
+            if (Client.GetType().GetRaw() != ClientTypeRaw.Editor) return default;
+
+            Debug.Log(self);
             return self;
         }
 
-        public static T Show<T>(this T self, string title)
+        public static T1 Show<T1, T2>(this T1 self, Func<T1, T2> func)
         {
-            Print((title, self));
+            if (Client.GetType().GetRaw() != ClientTypeRaw.Editor) return default;
+
+            Debug.Log(func(self));
             return self;
         }
 
@@ -1185,9 +1198,9 @@ namespace Ex
             return self[Random.Range(0, self.Count)];
         }
 
-        public static void Look<T>(this IEnumerable<T> self)
+        public static IEnumerable<T> Look<T>(this IEnumerable<T> self)
         {
-            string start = "List(";
+            string start = "(";
             string end = ")";
             string middle = "";
 
@@ -1204,11 +1217,13 @@ namespace Ex
             }
 
             (start + middle + end).Show();
+
+            return self;
         }
 
-        public static void Look<T1, T2>(this IEnumerable<T1> self, Func<T1, T2> func)
+        public static IEnumerable<T1> Look<T1, T2>(this IEnumerable<T1> self, Func<T1, T2> func)
         {
-            string start = "List(";
+            string start = "(";
             string end = ")";
             string middle = "";
 
@@ -1225,6 +1240,8 @@ namespace Ex
             }
 
             (start + middle + end).Show();
+
+            return self;
         }
 
         public static IEnumerable<(T1 e1, T2 e2)> Zip<T1, T2>(IEnumerable<T1> clc1, IEnumerable<T2> clc2)
