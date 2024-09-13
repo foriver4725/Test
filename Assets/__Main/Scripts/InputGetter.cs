@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
@@ -12,37 +12,37 @@ namespace IA
     public enum InputType
     {
         /// <summary>
-        /// �ynull�z�f�t�H���g�l�B�����Ӗ����Ȃ�
+        /// 【null】デフォルト値。何も意味しない
         /// </summary>
         Null,
 
         /// <summary>
-        /// �ybool�z���̃t���[�����A�����ꂽ�u�Ԃ̃t���[���ł��邩
+        /// 【bool】そのフレームが、押された瞬間のフレームであるか
         /// </summary>
         Click,
 
         /// <summary>
-        /// �ybool�z���̃t���[�����A���b�������ꂽ�u�Ԃ̃t���[���ł��邩
+        /// 【bool】そのフレームが、一定秒数押された瞬間のフレームであるか
         /// </summary>
         Hold,
 
         /// <summary>
-        /// �ybool�z���̃t���[���ɂ�����A������Ă��邩�̃t���O
+        /// 【bool】そのフレームにおける、押されているかのフラグ
         /// </summary>
         Value0,
 
         /// <summary>
-        /// �yfloat�z���̃t���[���ɂ�����A1���̓��͂̒l(�P�ʐ� �ȓ�)
+        /// 【float】そのフレームにおける、1軸の入力の値(単位線 以内)
         /// </summary>
         Value1,
 
         /// <summary>
-        /// �yVector2�z���̃t���[���ɂ�����A2���̓��͂̒l(�P�ʉ~ �ȓ�)
+        /// 【Vector2】そのフレームにおける、2軸の入力の値(単位円 以内)
         /// </summary>
         Value2,
 
         /// <summary>
-        /// �yVector3�z���̃t���[���ɂ�����A3���̓��͂̒l(�P�ʋ� �ȓ�)
+        /// 【Vector3】そのフレームにおける、3軸の入力の値(単位球 以内)
         /// </summary>
         Value3
     }

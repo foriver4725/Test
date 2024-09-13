@@ -1,4 +1,4 @@
-namespace Interface
+﻿namespace Interface
 {
     public interface INullExistable
     {

@@ -1,4 +1,4 @@
-using System;
+Ôªøusing System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -95,7 +95,7 @@ namespace Ex
         {
             if (type == ClientType.Editor_Editing || type == ClientType.Editor_Playing) return ClientTypeRaw.Editor;
             else if (type == ClientType.Build_Debug || type == ClientType.Build_Release) return ClientTypeRaw.Build;
-            else throw new Exception("ïsê≥Ç»éÌóﬁÇ≈Ç∑");
+            else throw new Exception("‰∏çÊ≠£„Å™Á®ÆÈ°û„Åß„Åô");
         }
     }
 
