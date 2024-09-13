@@ -10,4 +10,9 @@ namespace Interface
         void Start();
         void Update();
     }
+
+    public interface IInitable
+    {
+        void Init();
+    }
 }

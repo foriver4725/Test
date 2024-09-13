@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Interface;
@@ -10,12 +11,39 @@ namespace IA
 
     public enum InputType
     {
+        /// <summary>
+        /// 【null】デフォルト値。何も意味しない
+        /// </summary>
         Null,
+
+        /// <summary>
+        /// 【bool】そのフレームが、押された瞬間のフレームであるか
+        /// </summary>
         Click,
+
+        /// <summary>
+        /// 【bool】そのフレームが、一定秒数押された瞬間のフレームであるか
+        /// </summary>
         Hold,
+
+        /// <summary>
+        /// 【bool】そのフレームにおける、押されているかのフラグ
+        /// </summary>
         Value0,
+
+        /// <summary>
+        /// 【float】そのフレームにおける、1軸の入力の値(単位線 以内)
+        /// </summary>
         Value1,
+
+        /// <summary>
+        /// 【Vector2】そのフレームにおける、2軸の入力の値(単位円 以内)
+        /// </summary>
         Value2,
+
+        /// <summary>
+        /// 【Vector3】そのフレームにおける、3軸の入力の値(単位球 以内)
+        /// </summary>
         Value3
     }
 
@@ -23,12 +51,12 @@ namespace IA
     {
         private InputAction inputAction;
         private readonly InputType type;
-        private List<Action<InputAction.CallbackContext>> action;
+        private ReadOnlyCollection<Action<InputAction.CallbackContext>> action;
 
-        private bool val0 = false;
-        private float val1 = 0;
-        private Vector2 val2 = Vector2.zero;
-        private Vector3 val3 = Vector3.zero;
+        public bool Bool { get; private set; } = false;
+        public float Float { get; private set; } = 0;
+        public Vector2 Vector2 { get; private set; } = Vector2.zero;
+        public Vector3 Vector3 { get; private set; } = Vector3.zero;
 
         public InputInfo(InputAction inputAction, InputType type)
         {
@@ -37,21 +65,45 @@ namespace IA
 
             this.action = this.type switch
             {
-                InputType.Null
-                => null,
-                InputType.Click
-                => new() { (InputAction.CallbackContext context) => { val0 = true; } },
-                InputType.Hold
-                => new() { (InputAction.CallbackContext context) => { val0 = true; } },
-                InputType.Value0
-                => new() { (InputAction.CallbackContext context) => { val0 = true; },
-                    (InputAction.CallbackContext context) => { val0 = false; } },
-                InputType.Value1
-                => new() { (InputAction.CallbackContext context) => { val1 = context.ReadValue<float>(); } },
-                InputType.Value2
-                => new() { (InputAction.CallbackContext context) => { val2 = context.ReadValue<Vector2>(); } },
-                InputType.Value3
-                => new() { (InputAction.CallbackContext context) => { val3 = context.ReadValue<Vector3>(); } },
+                InputType.Null => null,
+
+                InputType.Click => new List<Action<InputAction.CallbackContext>>()
+                {
+                    _ => { Bool = true; }
+                }
+                .AsReadOnly(),
+
+                InputType.Hold => new List<Action<InputAction.CallbackContext>>()
+                {
+                    _ => { Bool = true; }
+                }
+                .AsReadOnly(),
+
+                InputType.Value0 => new List<Action<InputAction.CallbackContext>>()
+                {
+                    _ => { Bool = true; },
+                    _ => { Bool = false; }
+                }
+                .AsReadOnly(),
+
+                InputType.Value1 => new List<Action<InputAction.CallbackContext>>()
+                {
+                    e => { Float = e.ReadValue<float>(); }
+                }
+                .AsReadOnly(),
+
+                InputType.Value2 => new List<Action<InputAction.CallbackContext>>()
+                {
+                    e => { Vector2 = e.ReadValue<Vector2>(); }
+                }
+                .AsReadOnly(),
+
+                InputType.Value3 => new List<Action<InputAction.CallbackContext>>()
+                {
+                    e => { Vector3 = e.ReadValue<Vector3>(); }
+                }
+                .AsReadOnly(),
+
                 _ => null
             };
         }
@@ -67,23 +119,6 @@ namespace IA
             if (inputAction == null) return true;
             if (action == null) return true;
             return false;
-        }
-
-        public T Get<T>()
-        {
-            object ret = type switch
-            {
-                InputType.Null => null,
-                InputType.Click => val0,
-                InputType.Hold => val0,
-                InputType.Value0 => val0,
-                InputType.Value1 => val1,
-                InputType.Value2 => val2,
-                InputType.Value3 => val3,
-                _ => null
-            };
-
-            return (T)ret;
         }
 
         public void Link(bool isLink)
@@ -179,21 +214,16 @@ namespace IA
 
         public void OnLateUpdate()
         {
-            if (type == InputType.Click && val0) val0 = false;
-            if (type == InputType.Hold && val0) val0 = false;
+            if (type == InputType.Click && Bool) Bool = false;
+            else if (type == InputType.Hold && Bool) Bool = false;
         }
     }
 
-    #endregion
-
-    #region
-
-    public static class Ex
+    public static class InputEx
     {
         public static InputInfo Add(this InputInfo inputInfo, List<InputInfo> list)
         {
             list.Add(inputInfo);
-
             return inputInfo;
         }
     }
